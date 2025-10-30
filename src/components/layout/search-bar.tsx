@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import Image from 'next/image'
 import { Search, X } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { useDebounce } from '@/hooks/use-debounce'
@@ -99,9 +100,11 @@ export function SearchBar() {
                     className="flex items-center gap-4 px-4 py-2 hover:bg-gray-50"
                   >
                     {item.imageUrl && (
-                      <img
+                      <Image
                         src={item.imageUrl}
                         alt={item.name}
+                        width={48}
+                        height={48}
                         className="h-12 w-12 rounded-md object-cover"
                       />
                     )}

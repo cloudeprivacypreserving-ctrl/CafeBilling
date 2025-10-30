@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input'
 import { useEffect, useState } from 'react'
 import { Card } from './ui/card'
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface MenuItem {
   id: string
@@ -91,9 +92,11 @@ export function SearchBar() {
                 >
                   <div className="flex items-center gap-3">
                     {item.imageUrl && (
-                      <img
+                      <Image
                         src={item.imageUrl}
                         alt={item.name}
+                        width={48}
+                        height={48}
                         className="h-12 w-12 rounded-md object-cover"
                       />
                     )}

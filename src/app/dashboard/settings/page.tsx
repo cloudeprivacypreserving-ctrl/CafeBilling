@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -115,9 +116,11 @@ export default function SettingsPage() {
               <div className="mt-2">
                 <Label>Current QR Code:</Label>
                 <div className="mt-1">
-                  <img
+                  <Image
                     src={qrCodePath}
                     alt="QR Code"
+                    width={128}
+                    height={128}
                     className="w-32 h-32 border rounded bg-white"
                   />
                 </div>

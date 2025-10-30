@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { ProductCard } from '@/components/product-card'
 import { Button } from '@/components/ui/button'
@@ -76,7 +77,14 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         {/* Product Image */}
         {item.imageUrl && (
           <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100">
-            <img src={item.imageUrl} alt={item.name} className="h-full w-full object-cover" />
+            <Image
+              src={item.imageUrl}
+              alt={item.name}
+              className="h-full w-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority={true}
+            />
           </div>
         )}
 

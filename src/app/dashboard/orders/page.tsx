@@ -35,25 +35,24 @@ export default function OrdersPage() {
   const { toast } = useToast()
 
   useEffect(() => {
-    fetchOrders()
-  }, [])
-
-  const fetchOrders = async () => {
-    try {
-      const res = await fetch('/api/orders')
-      const data = await res.json()
-      setOrders(data)
-    } catch (error) {
-      console.error('Failed to fetch orders:', error)
-      toast({
-        title: 'Error',
-        description: 'Failed to load orders',
-        variant: 'destructive',
-      })
-    } finally {
-      setLoading(false)
+    const fetchOrders = async () => {
+      try {
+        const res = await fetch('/api/orders')
+        const data = await res.json()
+        setOrders(data)
+      } catch (error) {
+        console.error('Failed to fetch orders:', error)
+        toast({
+          title: 'Error',
+          description: 'Failed to load orders',
+          variant: 'destructive',
+        })
+      } finally {
+        setLoading(false)
+      }
     }
-  }
+    fetchOrders()
+  }, [toast])
 
   const handleStatusUpdate = async (orderId: string, status: Order['status']) => {
     try {

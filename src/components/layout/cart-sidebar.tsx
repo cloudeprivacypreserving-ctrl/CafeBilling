@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { ShoppingCart, X, Plus, Minus, Trash2, Loader2 } from 'lucide-react'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { formatCurrency } from '@/lib/utils'
 import { useCart } from '@/lib/cart'
@@ -112,9 +113,11 @@ export function CartSidebar() {
                         {state.items.map((item) => (
                           <li key={item.id} className="flex gap-4 py-4">
                             {item.imageUrl && (
-                              <img
+                              <Image
                                 src={item.imageUrl}
                                 alt={item.name}
+                                width={64}
+                                height={64}
                                 className="h-16 w-16 rounded-md object-cover"
                               />
                             )}
