@@ -1,0 +1,170 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  CASHIER
+}
+
+enum OrderType {
+  DINE_IN
+  TAKEAWAY
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  UPI
+}
+
+enum AuditAction {
+  ORDER_CREATED
+  ORDER_COMPLETED
+  ORDER_CANCELLED
+  ORDER_REFUNDED
+  MENU_ITEM_CREATED
+  MENU_ITEM_UPDATED
+  MENU_ITEM_DELETED
+  USER_CREATED
+  USER_UPDATED
+  SETTINGS_UPDATED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      UserRole @default(CASHIER)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders    Order[]
+  auditLogs AuditLog[]
+
+  @@map("users")
+}
+
+model Category {
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  order       Int        @default(0)
+  active      Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  menuItems   MenuItem[]
+
+  @@map("categories")
+}
+
+model MenuItem {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  price       Int      // stored in paise/cents
+  categoryId  String
+  imageUrl    String?
+  available   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category    Category   @relation(fields: [categoryId], references: [id])
+  orderLines  OrderLine[]
+  inventory   InventoryItem?
+
+  @@map("menu_items")
+}
+
+model InventoryItem {
+  id          String   @id @default(cuid())
+  menuItemId  String   @unique
+  quantity    Int      @default(0)
+  lowStockThreshold Int @default(10)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  menuItem MenuItem @relation(fields: [menuItemId], references: [id])
+
+  @@map("inventory_items")
+}
+
+model Order {
+  id              String        @id @default(cuid())
+  orderNumber     String        @unique
+  orderType       OrderType
+  paymentMethod   PaymentMethod?
+  customerName    String?
+  tableNumber     String?
+  subtotal        Int           // in paise/cents
+  tax             Int           // in paise/cents
+  discount        Int           @default(0) // in paise/cents
+  total           Int           // in paise/cents
+  status          String        @default("pending") // pending, completed, cancelled
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  userId          String?
+  user            User?         @relation(fields: [userId], references: [id])
+  orderLines      OrderLine[]
+
+  @@map("orders")
+}
+
+model OrderLine {
+  id           String   @id @default(cuid())
+  orderId      String
+  menuItemId   String
+  quantity     Int
+  unitPrice    Int      // in paise/cents
+  subtotal     Int      // in paise/cents
+  specialInstructions String?
+  createdAt    DateTime @default(now())
+
+  order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItem     MenuItem @relation(fields: [menuItemId], references: [id])
+
+  @@map("order_lines")
+}
+
+model Settings {
+  id                  String   @id @default(cuid())
+  businessName        String
+  businessAddress     String?
+  businessPhone       String?
+  businessEmail       String?
+  taxRate             Float    @default(0.18) // 18% GST
+  currency            String   @default("₹")
+  receiptFooter       String?
+  allowDiscounts      Boolean  @default(true)
+  updatedAt           DateTime @updatedAt
+  updatedBy           String?
+
+  @@map("settings")
+}
+
+model AuditLog {
+  id          String      @id @default(cuid())
+  action      AuditAction
+  entityType  String      // e.g., "Order", "MenuItem"
+  entityId    String
+  details     String?     // JSON string with details
+  userId      String?
+  user        User?       @relation(fields: [userId], references: [id])
+  createdAt   DateTime    @default(now())
+
+  @@map("audit_logs")
+}
+
