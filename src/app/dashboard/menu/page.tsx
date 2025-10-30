@@ -117,19 +117,19 @@ export default function MenuPage() {
 
   const handleImageUpload = async () => {
     if (!selectedFile) return null
-    
+
     setUploadingImage(true)
     try {
       const formDataToSend = new FormData()
       formDataToSend.append('file', selectedFile)
-      
+
       const res = await fetch('/api/upload', {
         method: 'POST',
         body: formDataToSend,
       })
-      
+
       if (!res.ok) throw new Error('Upload failed')
-      
+
       const data = await res.json()
       setUploadingImage(false)
       return data.url
@@ -146,25 +146,27 @@ export default function MenuPage() {
     try {
       const res = await fetch(`/api/menu/${id}`, { method: 'DELETE' })
       const data = await res.json()
-      
+
       if (!res.ok) {
         throw new Error(data.details || data.error || 'Failed to delete item')
       }
-      
+
       toast({ title: 'Success', description: 'Menu item deleted successfully' })
       fetchMenuItems()
     } catch (error: any) {
-      toast({ 
-        title: 'Cannot Delete Item', 
-        description: error.message || 'Failed to delete menu item. This item may be referenced in past orders.', 
-        variant: 'destructive' 
+      toast({
+        title: 'Cannot Delete Item',
+        description:
+          error.message ||
+          'Failed to delete menu item. This item may be referenced in past orders.',
+        variant: 'destructive',
       })
     }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     try {
       // Upload image if file is selected
       let imageUrl = formData.imageUrl
@@ -206,10 +208,10 @@ export default function MenuPage() {
       fetchMenuItems()
     } catch (error: any) {
       console.error('Submit error:', error)
-      toast({ 
-        title: 'Error', 
-        description: error.message || 'Operation failed', 
-        variant: 'destructive' 
+      toast({
+        title: 'Error',
+        description: error.message || 'Operation failed',
+        variant: 'destructive',
       })
     }
   }
@@ -243,11 +245,7 @@ export default function MenuPage() {
           <Card key={item.id}>
             {item.imageUrl && (
               <div className="card-image rounded-t-lg">
-                <img
-                  src={item.imageUrl}
-                  alt={item.name}
-                  className="h-full w-full"
-                />
+                <img src={item.imageUrl} alt={item.name} className="h-full w-full" />
               </div>
             )}
             <CardHeader>
@@ -270,9 +268,7 @@ export default function MenuPage() {
                   <span className="text-lg font-bold">{formatCurrency(item.price)}</span>
                   <span
                     className={`rounded-full px-2 py-1 text-xs ${
-                      item.available
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
+                      item.available ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                     }`}
                   >
                     {item.available ? 'Available' : 'Unavailable'}
@@ -358,9 +354,7 @@ export default function MenuPage() {
                   onChange={handleFileChange}
                   className="cursor-pointer"
                 />
-                {selectedFile && (
-                  <p className="mt-1 text-sm text-gray-500">{selectedFile.name}</p>
-                )}
+                {selectedFile && <p className="mt-1 text-sm text-gray-500">{selectedFile.name}</p>}
               </div>
               <div>
                 <Label htmlFor="imageUrl">OR Image URL</Label>

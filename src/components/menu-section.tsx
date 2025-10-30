@@ -32,10 +32,7 @@ export function MenuSection({ title, items, seeAllHref }: MenuSectionProps) {
     <section className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">{title}</h2>
-        <Link 
-          href={seeAllHref}
-          className="text-sm font-medium text-blue-600 hover:text-blue-800"
-        >
+        <Link href={seeAllHref} className="text-sm font-medium text-blue-600 hover:text-blue-800">
           See All &rarr;
         </Link>
       </div>

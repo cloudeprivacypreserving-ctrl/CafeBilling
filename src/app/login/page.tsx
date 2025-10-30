@@ -56,9 +56,7 @@ export default function LoginPage() {
             <span className="text-3xl">☕</span>
           </div>
           <CardTitle className="text-3xl font-bold text-gray-800">My Cafe</CardTitle>
-          <CardDescription className="text-base">
-            Sign in to access your POS system
-          </CardDescription>
+          <CardDescription className="text-base">Sign in to access your POS system</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -98,4 +96,3 @@ export default function LoginPage() {
     </div>
   )
 }
-

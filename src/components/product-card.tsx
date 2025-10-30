@@ -30,7 +30,16 @@ interface ProductCardProps {
   }
 }
 
-export function ProductCard({ id, name, description, price, imageUrl, rating, ratingCount, available }: ProductCardProps) {
+export function ProductCard({
+  id,
+  name,
+  description,
+  price,
+  imageUrl,
+  rating,
+  ratingCount,
+  available,
+}: ProductCardProps) {
   const [quantity, setQuantity] = useState(1)
   const [showQuickView, setShowQuickView] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
@@ -38,7 +47,7 @@ export function ProductCard({ id, name, description, price, imageUrl, rating, ra
   const { toast } = useToast()
 
   const handleQuantityChange = (delta: number) => {
-    setQuantity(current => Math.max(1, current + delta))
+    setQuantity((current) => Math.max(1, current + delta))
   }
 
   const handleAddToCart = async () => {
@@ -73,7 +82,7 @@ export function ProductCard({ id, name, description, price, imageUrl, rating, ra
 
   return (
     <>
-      <div 
+      <div
         className="group relative overflow-hidden rounded-lg border bg-white transition-all hover:shadow-lg"
         onClick={() => available && setShowQuickView(true)}
       >
@@ -95,7 +104,7 @@ export function ProductCard({ id, name, description, price, imageUrl, rating, ra
             )}
           </div>
         )}
-        
+
         {/* Content */}
         <div className="p-4">
           <h3
@@ -139,9 +148,9 @@ export function ProductCard({ id, name, description, price, imageUrl, rating, ra
                 </div>
               )}
             </div>
-            
+
             <Button
-              variant={available ? "default" : "secondary"}
+              variant={available ? 'default' : 'secondary'}
               size="sm"
               className="whitespace-nowrap"
               onClick={(e) => {
@@ -167,12 +176,7 @@ export function ProductCard({ id, name, description, price, imageUrl, rating, ra
           <div className="grid gap-4">
             {imageUrl && (
               <div className="relative aspect-square overflow-hidden rounded-lg">
-                <Image
-                  src={imageUrl}
-                  alt={name}
-                  fill
-                  className="object-cover"
-                />
+                <Image src={imageUrl} alt={name} fill className="object-cover" />
               </div>
             )}
 
@@ -199,11 +203,7 @@ export function ProductCard({ id, name, description, price, imageUrl, rating, ra
                       <Plus className="h-4 w-4" />
                     </button>
                   </div>
-                  <Button
-                    className="flex-1"
-                    onClick={handleAddToCart}
-                    disabled={isAdding}
-                  >
+                  <Button className="flex-1" onClick={handleAddToCart} disabled={isAdding}>
                     {isAdding ? 'Adding...' : 'Add to Cart'}
                   </Button>
                 </div>

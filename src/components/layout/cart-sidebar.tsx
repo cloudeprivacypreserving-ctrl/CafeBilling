@@ -1,23 +1,22 @@
-"use client";
+'use client'
 
-import { useState } from 'react';
-import { ShoppingCart, X, Plus, Minus, Trash2, Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { formatCurrency } from '@/lib/utils';
-import { useCart } from '@/lib/cart';
-import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react'
+import { ShoppingCart, X, Plus, Minus, Trash2, Loader2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { formatCurrency } from '@/lib/utils'
+import { useCart } from '@/lib/cart'
+import { useToast } from '@/hooks/use-toast'
+import { useRouter } from 'next/navigation'
 
 export function CartSidebar() {
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [showWhatsapp, setShowWhatsapp] = useState(false);
-  const [mobile, setMobile] = useState("");
-  const { state, dispatch, placeOrder } = useCart();
-  const { toast } = useToast();
-  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [showWhatsapp, setShowWhatsapp] = useState(false)
+  const [mobile, setMobile] = useState('')
+  const { state, dispatch, placeOrder } = useCart()
+  const { toast } = useToast()
+  const router = useRouter()
 
   const handleUpdateQuantity = (id: string, quantity: number) => {
     dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } })
@@ -78,11 +77,23 @@ export function CartSidebar() {
               {showSuccess ? (
                 <div className="flex flex-1 flex-col items-center justify-center">
                   <div className="mb-4 h-16 w-16 rounded-full bg-green-100 flex items-center justify-center">
-                    <svg className="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    <svg
+                      className="h-10 w-10 text-green-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                   </div>
-                  <div className="text-lg font-semibold text-green-700 mb-2">Order placed successfully!</div>
+                  <div className="text-lg font-semibold text-green-700 mb-2">
+                    Order placed successfully!
+                  </div>
                   <div className="text-gray-600 mb-4">Thank you for your order.</div>
                 </div>
               ) : (
@@ -98,7 +109,7 @@ export function CartSidebar() {
                   ) : (
                     <div className="flex-1 overflow-y-auto p-4">
                       <ul className="divide-y">
-                        {state.items.map(item => (
+                        {state.items.map((item) => (
                           <li key={item.id} className="flex gap-4 py-4">
                             {item.imageUrl && (
                               <img
@@ -109,12 +120,12 @@ export function CartSidebar() {
                             )}
                             <div className="flex flex-1 flex-col">
                               <h4 className="font-medium">{item.name}</h4>
-                              <p className="text-sm text-gray-500">
-                                {formatCurrency(item.price)}
-                              </p>
+                              <p className="text-sm text-gray-500">{formatCurrency(item.price)}</p>
                               <div className="mt-2 flex items-center gap-2">
                                 <button
-                                  onClick={() => handleUpdateQuantity(item.id, Math.max(0, item.quantity - 1))}
+                                  onClick={() =>
+                                    handleUpdateQuantity(item.id, Math.max(0, item.quantity - 1))
+                                  }
                                   className="rounded-full p-1 hover:bg-gray-100"
                                 >
                                   <Minus className="h-4 w-4" />
@@ -147,9 +158,9 @@ export function CartSidebar() {
                         <span>Total</span>
                         <span>{formatCurrency(state.total)}</span>
                       </div>
-                      <Button 
-                        className="w-full" 
-                        size="lg" 
+                      <Button
+                        className="w-full"
+                        size="lg"
                         onClick={handleCheckout}
                         disabled={isProcessing}
                       >

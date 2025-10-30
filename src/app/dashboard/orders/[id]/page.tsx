@@ -37,52 +37,52 @@ interface Order {
 }
 
 export default function OrderDetailPage() {
-  const params = useParams();
-  const orderId = params.id as string;
-  const [order, setOrder] = useState<Order | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [mobile, setMobile] = useState('');
-  const { toast } = useToast();
-  const [qrCodePath, setQrCodePath] = useState<string | null>(null);
+  const params = useParams()
+  const orderId = params.id as string
+  const [order, setOrder] = useState<Order | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [mobile, setMobile] = useState('')
+  const { toast } = useToast()
+  const [qrCodePath, setQrCodePath] = useState<string | null>(null)
 
   // Fetch QR code path for WhatsApp message
   useEffect(() => {
     fetch('/api/settings/qr-code')
-      .then(res => res.json())
-      .then(data => setQrCodePath(data.qrCodePath));
-  }, []);
+      .then((res) => res.json())
+      .then((data) => setQrCodePath(data.qrCodePath))
+  }, [])
 
   useEffect(() => {
     const fetchOrder = async () => {
-      setLoading(true);
+      setLoading(true)
       try {
-        const res = await fetch(`/api/orders/${orderId}`);
-        if (!res.ok) throw new Error('Order not found');
-        const data = await res.json();
-        setOrder(data);
+        const res = await fetch(`/api/orders/${orderId}`)
+        if (!res.ok) throw new Error('Order not found')
+        const data = await res.json()
+        setOrder(data)
       } catch (err) {
-        toast({ title: 'Error', description: 'Failed to load order', variant: 'destructive' });
+        toast({ title: 'Error', description: 'Failed to load order', variant: 'destructive' })
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
-    fetchOrder();
+    }
+    fetchOrder()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId]);
+  }, [orderId])
 
   const handlePrint = () => {
-    window.print();
-  };
+    window.print()
+  }
 
   const handleDownload = () => {
-    toast({ title: 'Download', description: 'PDF download coming soon!' });
-  };
+    toast({ title: 'Download', description: 'PDF download coming soon!' })
+  }
 
   if (loading) {
-    return <div className="p-8 text-center text-gray-500">Loading order...</div>;
+    return <div className="p-8 text-center text-gray-500">Loading order...</div>
   }
   if (!order) {
-    return <div className="p-8 text-center text-red-500">Order not found.</div>;
+    return <div className="p-8 text-center text-red-500">Order not found.</div>
   }
 
   return (
@@ -108,7 +108,7 @@ export default function OrderDetailPage() {
               type="tel"
               placeholder="Enter WhatsApp number"
               value={mobile}
-              onChange={e => setMobile(e.target.value)}
+              onChange={(e) => setMobile(e.target.value)}
               className="rounded border-2 border-gray-500 px-3 py-2 text-base w-56 focus:border-green-700 focus:outline-none"
               maxLength={10}
             />
@@ -116,7 +116,12 @@ export default function OrderDetailPage() {
               className="bg-green-900 hover:bg-green-950 text-white font-semibold px-5 py-2 text-base"
               disabled={!/^\d{10}$/.test(mobile)}
               onClick={() => {
-                const itemsList = order.orderLines.map(line => `• ${line.menuItem.name} x${line.quantity} - ${formatCurrency(line.subtotal)}`).join('%0A');
+                const itemsList = order.orderLines
+                  .map(
+                    (line) =>
+                      `• ${line.menuItem.name} x${line.quantity} - ${formatCurrency(line.subtotal)}`
+                  )
+                  .join('%0A')
                 let msg =
                   `🍽️ *Thank you for ordering with My Cafe!*\n\n` +
                   `*Order No:* ${order.orderNumber}\n` +
@@ -126,13 +131,13 @@ export default function OrderDetailPage() {
                   `*Subtotal:* ${formatCurrency(order.subtotal)}\n` +
                   `*Tax:* ${formatCurrency(order.tax)}\n` +
                   `*Discount:* -${formatCurrency(order.discount)}\n` +
-                  `*Total:* ${formatCurrency(order.total)}\n\n`;
+                  `*Total:* ${formatCurrency(order.total)}\n\n`
                 if (qrCodePath) {
-                  msg += `Scan to pay: ${window.location.origin}${qrCodePath}\n`;
+                  msg += `Scan to pay: ${window.location.origin}${qrCodePath}\n`
                 }
-                msg += `Thank you for choosing My Cafe!`;
-                const encodedMsg = encodeURIComponent(msg);
-                window.open(`https://wa.me/91${mobile}?text=${encodedMsg}`, '_blank');
+                msg += `Thank you for choosing My Cafe!`
+                const encodedMsg = encodeURIComponent(msg)
+                window.open(`https://wa.me/91${mobile}?text=${encodedMsg}`, '_blank')
               }}
             >
               Send on WhatsApp
@@ -140,7 +145,6 @@ export default function OrderDetailPage() {
           </div>
         </div>
       </div>
-
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
@@ -221,4 +225,3 @@ export default function OrderDetailPage() {
     </div>
   )
 }
-

@@ -12,7 +12,7 @@ interface Order {
   total: number
   createdAt: string
   orderType: string
-  status: string;
+  status: string
 }
 
 export default function ReportsPage() {
@@ -32,7 +32,11 @@ export default function ReportsPage() {
       const res = await fetch('/api/orders')
       const data = await res.json()
       // Only include orders with status COMPLETED (case-insensitive)
-      setOrders(data.filter((o: Order) => o.status && (o.status === 'COMPLETED' || o.status === 'completed')))
+      setOrders(
+        data.filter(
+          (o: Order) => o.status && (o.status === 'COMPLETED' || o.status === 'completed')
+        )
+      )
     } catch (error) {
       console.error(error)
     } finally {
@@ -86,9 +90,7 @@ export default function ReportsPage() {
               <input
                 type="date"
                 value={dateRange.start}
-                onChange={(e) =>
-                  setDateRange({ ...dateRange, start: e.target.value })
-                }
+                onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
                 className="mt-1 rounded border px-3 py-2"
               />
             </div>
@@ -151,13 +153,15 @@ export default function ReportsPage() {
               </thead>
               <tbody>
                 {ordersInRange.map((order) => (
-                  <tr key={order.id} className="border-b hover:bg-gray-50 cursor-pointer" onClick={() => window.location.href = `/dashboard/orders/${order.id}`}>
+                  <tr
+                    key={order.id}
+                    className="border-b hover:bg-gray-50 cursor-pointer"
+                    onClick={() => (window.location.href = `/dashboard/orders/${order.id}`)}
+                  >
                     <td className="py-2">{order.orderNumber}</td>
                     <td className="py-2">{formatDate(order.createdAt)}</td>
                     <td className="py-2">{order.orderType}</td>
-                    <td className="py-2 text-right font-semibold">
-                      {formatCurrency(order.total)}
-                    </td>
+                    <td className="py-2 text-right font-semibold">{formatCurrency(order.total)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -168,4 +172,3 @@ export default function ReportsPage() {
     </div>
   )
 }
-

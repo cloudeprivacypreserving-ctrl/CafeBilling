@@ -2,21 +2,21 @@ import { PrismaClient, UserRole } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 const menuCategories = {
   TODAYS_EXCLUSIVE: "Today's Exclusive Dishes",
-  VALUE_MEALS: "Value Meals",
-  COMBOS: "Combos",
-  QUICK_BITES: "Quick Bites",
-  COSY_SPECIAL_SNACKS: "Cosy Special Snacks",
-  BURGERS_PANEER: "Burgers and Sandwiches - Paneer Burgers",
-  GRILLED_SANDWICHES: "Burgers and Sandwiches - Grilled Sandwiches",
-  BURGERS: "Burgers and Sandwiches - Burgers",
-  PIZZA: "Pizza",
-  FRIES: "Fries",
-  HOT_BREW: "Hot Brew",
-  COLD_BREWS: "Drinks (Beverages) - Cold Brews",
-  SHAKES: "Drinks (Beverages) - Shakes",
-  MOCKTAILS: "Drinks (Beverages) - Mocktails",
-  PASTA: "Pasta",
-  MAGGI: "Maggi"
+  VALUE_MEALS: 'Value Meals',
+  COMBOS: 'Combos',
+  QUICK_BITES: 'Quick Bites',
+  COSY_SPECIAL_SNACKS: 'Cosy Special Snacks',
+  BURGERS_PANEER: 'Burgers and Sandwiches - Paneer Burgers',
+  GRILLED_SANDWICHES: 'Burgers and Sandwiches - Grilled Sandwiches',
+  BURGERS: 'Burgers and Sandwiches - Burgers',
+  PIZZA: 'Pizza',
+  FRIES: 'Fries',
+  HOT_BREW: 'Hot Brew',
+  COLD_BREWS: 'Drinks (Beverages) - Cold Brews',
+  SHAKES: 'Drinks (Beverages) - Shakes',
+  MOCKTAILS: 'Drinks (Beverages) - Mocktails',
+  PASTA: 'Pasta',
+  MAGGI: 'Maggi',
 } as const
 
 const prisma = new PrismaClient()
@@ -67,25 +67,22 @@ async function main() {
       data: {
         name,
         order: order++,
-      }
+      },
     })
     categories.push(category)
   }
 
   // Create a map of category names to their IDs
-  const categoryMap = categories.reduce<Record<string, string>>(
-    (acc, category) => {
-      acc[category.name] = category.id
-      return acc
-    },
-    {}
-  )
+  const categoryMap = categories.reduce<Record<string, string>>((acc, category) => {
+    acc[category.name] = category.id
+    return acc
+  }, {})
 
   // Import menu items from separate file
   const { menuItemsData } = await import('./menu-items')
 
   // Add a placeholder image URL for all items
-  const placeholderImage = "https://placehold.co/400x400?text=Coming+Soon"
+  const placeholderImage = 'https://placehold.co/400x400?text=Coming+Soon'
 
   // Create all menu items with the placeholder image
   // Create all menu items with the placeholder image
@@ -95,8 +92,8 @@ async function main() {
       data: {
         ...itemData,
         categoryId: categoryMap[categoryName],
-        imageUrl: placeholderImage
-      }
+        imageUrl: placeholderImage,
+      },
     })
     console.log(`Created menu item: ${item.name}`)
   }
@@ -133,4 +130,3 @@ main()
     await prisma.$disconnect()
     process.exit(1)
   })
-

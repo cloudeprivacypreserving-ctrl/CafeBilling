@@ -15,7 +15,7 @@ export async function POST(request: Request) {
         subtotal: Math.round(total),
         tax: Math.round(total * 0.18), // 18% GST
         total: Math.round(total * 1.18), // Including tax
-  status: 'PENDING',
+        status: 'PENDING',
         orderLines: {
           create: items.map((item: any) => ({
             menuItemId: item.id,
@@ -37,9 +37,6 @@ export async function POST(request: Request) {
     return NextResponse.json(order)
   } catch (error) {
     console.error('Failed to create order:', error)
-    return NextResponse.json(
-      { error: 'Failed to create order' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to create order' }, { status: 500 })
   }
 }

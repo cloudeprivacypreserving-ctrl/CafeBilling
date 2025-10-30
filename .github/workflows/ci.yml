@@ -60,4 +60,3 @@ jobs:
         run: npm run build
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/my_cafe_test
-

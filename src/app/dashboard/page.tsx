@@ -7,13 +7,8 @@ async function getDashboardStats() {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
-  const completedStatus = ['COMPLETED', 'completed'];
-  const [
-    totalOrders,
-    todayRevenue,
-    menuItemsCount,
-    lowStockItems,
-  ] = await Promise.all([
+  const completedStatus = ['COMPLETED', 'completed']
+  const [totalOrders, todayRevenue, menuItemsCount, lowStockItems] = await Promise.all([
     prisma.order.count({ where: { status: { in: completedStatus }, createdAt: { gte: today } } }),
     prisma.order.aggregate({
       where: { status: { in: completedStatus }, createdAt: { gte: today } },
@@ -113,4 +108,3 @@ export default async function DashboardPage() {
     </div>
   )
 }
-

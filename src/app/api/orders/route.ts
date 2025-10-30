@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
         tax,
         discount: discountAmount,
         total,
-  status: 'PENDING',
+        status: 'PENDING',
         userId: session.user.id,
         orderLines: {
           create: orderLines,
@@ -96,4 +96,3 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
   }
 }
-

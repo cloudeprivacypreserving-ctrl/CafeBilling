@@ -24,7 +24,7 @@ interface Order {
   id: string
   orderNumber: string
   total: number
-  status: 'PENDING' | 'COMPLETED' | 'CANCELLED' | 'pending' | 'completed' | 'cancelled';
+  status: 'PENDING' | 'COMPLETED' | 'CANCELLED' | 'pending' | 'completed' | 'cancelled'
   createdAt: string
   items: OrderItem[]
 }
@@ -71,7 +71,7 @@ export default function OrdersPage() {
         title: 'Success',
         description: 'Order status updated successfully',
       })
-      
+
       // Refresh orders
       fetchOrders()
     } catch (error) {
@@ -115,12 +115,8 @@ export default function OrdersPage() {
               <div className="p-6">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div>
-                    <h3 className="text-lg font-semibold">
-                      Order #{order.orderNumber}
-                    </h3>
-                    <p className="text-sm text-gray-500">
-                      {formatDate(new Date(order.createdAt))}
-                    </p>
+                    <h3 className="text-lg font-semibold">Order #{order.orderNumber}</h3>
+                    <p className="text-sm text-gray-500">{formatDate(new Date(order.createdAt))}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <span
@@ -128,8 +124,8 @@ export default function OrdersPage() {
                         order.status && order.status.toUpperCase() === 'COMPLETED'
                           ? 'bg-green-100 text-green-800'
                           : order.status && order.status.toUpperCase() === 'CANCELLED'
-                          ? 'bg-red-100 text-red-800'
-                          : 'bg-yellow-100 text-yellow-800'
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-yellow-100 text-yellow-800'
                       }`}
                     >
                       {order.status ? order.status.toUpperCase() : ''}
@@ -147,16 +143,11 @@ export default function OrdersPage() {
                   <ul className="space-y-2">
                     {Array.isArray(order.items) && order.items.length > 0 ? (
                       order.items.map((item) => (
-                        <li
-                          key={item.id}
-                          className="flex items-center justify-between text-sm"
-                        >
+                        <li key={item.id} className="flex items-center justify-between text-sm">
                           <span>
                             {item.quantity}x {item.menuItem.name}
                           </span>
-                          <span className="text-gray-600">
-                            {formatCurrency(item.price)}
-                          </span>
+                          <span className="text-gray-600">{formatCurrency(item.price)}</span>
                         </li>
                       ))
                     ) : (
@@ -168,9 +159,7 @@ export default function OrdersPage() {
                 <div className="mt-4 flex items-center justify-between border-t pt-4">
                   <div>
                     <span className="font-medium">Total:</span>
-                    <span className="ml-2 text-lg font-bold">
-                      {formatCurrency(order.total)}
-                    </span>
+                    <span className="ml-2 text-lg font-bold">{formatCurrency(order.total)}</span>
                   </div>
 
                   {order.status && order.status.toUpperCase() === 'PENDING' && (
@@ -182,10 +171,7 @@ export default function OrdersPage() {
                       >
                         Cancel
                       </Button>
-                      <Button
-                        size="sm"
-                        onClick={() => handleStatusUpdate(order.id, 'COMPLETED')}
-                      >
+                      <Button size="sm" onClick={() => handleStatusUpdate(order.id, 'COMPLETED')}>
                         Complete
                       </Button>
                     </div>

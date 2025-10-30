@@ -76,20 +76,14 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         {/* Product Image */}
         {item.imageUrl && (
           <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100">
-            <img
-              src={item.imageUrl}
-              alt={item.name}
-              className="h-full w-full object-cover"
-            />
+            <img src={item.imageUrl} alt={item.name} className="h-full w-full object-cover" />
           </div>
         )}
 
         {/* Product Info */}
         <div className="space-y-4">
           <h1 className="text-3xl font-bold">{item.name}</h1>
-          {item.description && (
-            <p className="text-lg text-gray-600">{item.description}</p>
-          )}
+          {item.description && <p className="text-lg text-gray-600">{item.description}</p>}
           <div className="flex items-baseline gap-2">
             <span className="text-2xl font-bold">₹{(item.price / 100).toFixed(2)}</span>
           </div>
@@ -139,12 +133,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
               </p>
             </div>
           ) : (
-            <Button
-              size="lg"
-              variant="secondary"
-              className="w-full"
-              disabled
-            >
+            <Button size="lg" variant="secondary" className="w-full" disabled>
               Out of Stock
             </Button>
           )}

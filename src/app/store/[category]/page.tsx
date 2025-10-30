@@ -5,13 +5,15 @@ import { notFound } from 'next/navigation'
 import { ProductCard } from '@/components/product-card'
 import { SectionHeader } from '@/components/section-header'
 
-
 // Utility to convert category name to slug and back
 function slugify(name: string) {
-  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
 }
 function unslugify(slug: string) {
-  return slug.replace(/-/g, ' ');
+  return slug.replace(/-/g, ' ')
 }
 
 interface MenuItem {
@@ -25,37 +27,37 @@ interface MenuItem {
   available: boolean
 }
 
-
 export default function CategoryPage({ params }: { params: { category: string } }) {
-  const [items, setItems] = useState<MenuItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [categoryName, setCategoryName] = useState<string | null>(null);
+  const [items, setItems] = useState<MenuItem[]>([])
+  const [loading, setLoading] = useState(true)
+  const [categoryName, setCategoryName] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const res = await fetch('/api/menu');
-        const data = await res.json();
+        const res = await fetch('/api/menu')
+        const data = await res.json()
         // Find all unique categories
-        const allCategories: string[] = Array.from(new Set(data.map((item: MenuItem) => String(item.category.name))));
+        const allCategories: string[] = Array.from(
+          new Set(data.map((item: MenuItem) => String(item.category.name)))
+        )
         // Find the category name that matches the slug
-        const matchedCategory: string | null = allCategories.find(
-          (cat) => slugify(cat) === params.category
-        ) || null;
-        setCategoryName(matchedCategory);
+        const matchedCategory: string | null =
+          allCategories.find((cat) => slugify(cat) === params.category) || null
+        setCategoryName(matchedCategory)
         // Filter items by matched category
         const filteredItems = matchedCategory
           ? data.filter((item: MenuItem) => slugify(String(item.category.name)) === params.category)
-          : [];
-        setItems(filteredItems);
+          : []
+        setItems(filteredItems)
       } catch (error) {
-        console.error('Failed to fetch items:', error);
+        console.error('Failed to fetch items:', error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
-    fetchItems();
-  }, [params.category]);
+    }
+    fetchItems()
+  }, [params.category])
 
   if (loading) {
     return (
@@ -65,7 +67,7 @@ export default function CategoryPage({ params }: { params: { category: string } 
           <p>Loading...</p>
         </div>
       </div>
-    );
+    )
   }
 
   if (!categoryName) {
@@ -73,12 +75,12 @@ export default function CategoryPage({ params }: { params: { category: string } 
       <div className="container mx-auto px-4 py-8">
         <SectionHeader title="Category Not Found" description="This category does not exist." />
       </div>
-    );
+    )
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <SectionHeader 
+      <SectionHeader
         title={categoryName}
         description={`Browse our selection of ${categoryName}.`}
       />
@@ -98,5 +100,5 @@ export default function CategoryPage({ params }: { params: { category: string } 
         </div>
       )}
     </div>
-  );
+  )
 }

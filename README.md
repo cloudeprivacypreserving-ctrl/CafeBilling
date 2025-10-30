@@ -30,7 +30,7 @@ A modern, production-ready Point of Sale (POS) system for small cafes, built wit
 
 ## 📋 Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - PostgreSQL 15+
 - npm or yarn
 
@@ -154,6 +154,7 @@ NEXTAUTH_SECRET=your-secret-key-here
 ### Step 3: Deploy
 
 Vercel will automatically:
+
 1. Install dependencies
 2. Run `prisma generate`
 3. Build the Next.js application
@@ -278,4 +279,3 @@ For issues and questions, please open an issue on GitHub.
 ---
 
 **Made with ❤️ for small cafes everywhere**
-

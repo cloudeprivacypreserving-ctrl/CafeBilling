@@ -57,4 +57,3 @@ export interface Order {
   updatedAt: Date
   orderLines: OrderLine[]
 }
-

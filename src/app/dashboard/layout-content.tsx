@@ -112,4 +112,3 @@ export default function DashboardLayoutContent({ children }: { children: React.R
     </div>
   )
 }
-

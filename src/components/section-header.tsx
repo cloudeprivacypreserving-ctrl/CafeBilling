@@ -5,7 +5,12 @@ interface SectionHeaderProps {
   onActionClick?: () => void
 }
 
-export function SectionHeader({ title, description, actionLabel, onActionClick }: SectionHeaderProps) {
+export function SectionHeader({
+  title,
+  description,
+  actionLabel,
+  onActionClick,
+}: SectionHeaderProps) {
   return (
     <div className="mb-6 flex items-center justify-between">
       <div>

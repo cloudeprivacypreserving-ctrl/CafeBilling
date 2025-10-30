@@ -51,9 +51,7 @@ export default function StorefrontPage() {
 
   // Get newly launched items (most recently added)
   const newlyLaunched = [...items]
-    .sort((a, b) => 
-      new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime()
-    )
+    .sort((a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime())
     .slice(0, 8)
 
   // Get bestsellers (most ordered items)
@@ -75,81 +73,81 @@ export default function StorefrontPage() {
   return (
     <main className="container mx-auto space-y-12 px-4 py-8">
       {/* Bestsellers Section */}
+      <MenuSection
+        title="Bestsellers ⭐"
+        items={bestsellers}
+        seeAllHref="/store/category/bestsellers"
+      />
+
+      {/* Newly Launched Section */}
+      <MenuSection
+        title="Newly Launched ✨"
+        items={newlyLaunched}
+        seeAllHref="/store/category/new"
+      />
+
+      {/* Hot Beverages Section */}
+      {itemsByCategory[menuCategories.HOT_BREW]?.length > 0 && (
         <MenuSection
-          title="Bestsellers ⭐"
-          items={bestsellers}
-          seeAllHref="/store/category/bestsellers"
+          title="Hot Beverages ☕"
+          items={itemsByCategory[menuCategories.HOT_BREW]}
+          seeAllHref="/store/category/hot-brew"
         />
+      )}
 
-        {/* Newly Launched Section */}
+      {/* Cold Beverages Section */}
+      {itemsByCategory[menuCategories.COLD_BREWS]?.length > 0 && (
         <MenuSection
-          title="Newly Launched ✨"
-          items={newlyLaunched}
-          seeAllHref="/store/category/new"
+          title="Cold Beverages 🥤"
+          items={itemsByCategory[menuCategories.COLD_BREWS]}
+          seeAllHref="/store/category/cold-brews"
         />
+      )}
 
-        {/* Hot Beverages Section */}
-        {itemsByCategory[menuCategories.HOT_BREW]?.length > 0 && (
-          <MenuSection
-            title="Hot Beverages ☕"
-            items={itemsByCategory[menuCategories.HOT_BREW]}
-            seeAllHref="/store/category/hot-brew"
-          />
-        )}
+      {/* Shakes Section */}
+      {itemsByCategory[menuCategories.SHAKES]?.length > 0 && (
+        <MenuSection
+          title="Shakes 🥤"
+          items={itemsByCategory[menuCategories.SHAKES]}
+          seeAllHref="/store/category/shakes"
+        />
+      )}
 
-        {/* Cold Beverages Section */}
-        {itemsByCategory[menuCategories.COLD_BREWS]?.length > 0 && (
-          <MenuSection
-            title="Cold Beverages 🥤"
-            items={itemsByCategory[menuCategories.COLD_BREWS]}
-            seeAllHref="/store/category/cold-brews"
-          />
-        )}
+      {/* Quick Bites Section */}
+      {itemsByCategory[menuCategories.QUICK_BITES]?.length > 0 && (
+        <MenuSection
+          title="Quick Bites 🍿"
+          items={itemsByCategory[menuCategories.QUICK_BITES]}
+          seeAllHref="/store/category/quick-bites"
+        />
+      )}
 
-        {/* Shakes Section */}
-        {itemsByCategory[menuCategories.SHAKES]?.length > 0 && (
-          <MenuSection
-            title="Shakes 🥤"
-            items={itemsByCategory[menuCategories.SHAKES]}
-            seeAllHref="/store/category/shakes"
-          />
-        )}
+      {/* Burgers Section */}
+      {itemsByCategory[menuCategories.BURGERS]?.length > 0 && (
+        <MenuSection
+          title="Burgers �"
+          items={itemsByCategory[menuCategories.BURGERS]}
+          seeAllHref="/store/category/burgers"
+        />
+      )}
 
-        {/* Quick Bites Section */}
-        {itemsByCategory[menuCategories.QUICK_BITES]?.length > 0 && (
-          <MenuSection
-            title="Quick Bites 🍿"
-            items={itemsByCategory[menuCategories.QUICK_BITES]}
-            seeAllHref="/store/category/quick-bites"
-          />
-        )}
+      {/* Pizza Section */}
+      {itemsByCategory[menuCategories.PIZZA]?.length > 0 && (
+        <MenuSection
+          title="Pizza 🍕"
+          items={itemsByCategory[menuCategories.PIZZA]}
+          seeAllHref="/store/category/pizza"
+        />
+      )}
 
-        {/* Burgers Section */}
-        {itemsByCategory[menuCategories.BURGERS]?.length > 0 && (
-          <MenuSection
-            title="Burgers �"
-            items={itemsByCategory[menuCategories.BURGERS]}
-            seeAllHref="/store/category/burgers"
-          />
-        )}
-
-        {/* Pizza Section */}
-        {itemsByCategory[menuCategories.PIZZA]?.length > 0 && (
-          <MenuSection
-            title="Pizza 🍕"
-            items={itemsByCategory[menuCategories.PIZZA]}
-            seeAllHref="/store/category/pizza"
-          />
-        )}
-
-        {/* Value Meals Section */}
-        {itemsByCategory[menuCategories.VALUE_MEALS]?.length > 0 && (
-          <MenuSection
-            title="Value Meals 🍽️"
-            items={itemsByCategory[menuCategories.VALUE_MEALS]}
-            seeAllHref="/store/category/value-meals"
-          />
-        )}
-      </main>
+      {/* Value Meals Section */}
+      {itemsByCategory[menuCategories.VALUE_MEALS]?.length > 0 && (
+        <MenuSection
+          title="Value Meals 🍽️"
+          items={itemsByCategory[menuCategories.VALUE_MEALS]}
+          seeAllHref="/store/category/value-meals"
+        />
+      )}
+    </main>
   )
 }

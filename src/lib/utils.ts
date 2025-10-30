@@ -34,4 +34,3 @@ export function generateOrderNumber(): string {
   const random = Math.floor(Math.random() * 10000)
   return `ORD-${timestamp}-${random}`
 }
-

@@ -35,13 +35,16 @@ export function SearchBar() {
       try {
         const response = await fetch('/api/menu')
         const items = await response.json()
-        
-        const filtered = items.filter((item: MenuItem) =>
-          item.name.toLowerCase().includes(query.toLowerCase()) ||
-          item.description?.toLowerCase().includes(query.toLowerCase()) ||
-          item.category.name.toLowerCase().includes(query.toLowerCase())
-        ).slice(0, 5) // Limit to top 5 results
-        
+
+        const filtered = items
+          .filter(
+            (item: MenuItem) =>
+              item.name.toLowerCase().includes(query.toLowerCase()) ||
+              item.description?.toLowerCase().includes(query.toLowerCase()) ||
+              item.category.name.toLowerCase().includes(query.toLowerCase())
+          )
+          .slice(0, 5) // Limit to top 5 results
+
         setResults(filtered)
       } catch (error) {
         console.error('Search failed:', error)
@@ -73,9 +76,7 @@ export function SearchBar() {
       {showResults && (query.trim() || results.length > 0) && (
         <Card className="absolute z-50 mt-2 w-full overflow-hidden p-2">
           {isLoading ? (
-            <div className="p-4 text-center text-sm text-gray-500">
-              Searching...
-            </div>
+            <div className="p-4 text-center text-sm text-gray-500">Searching...</div>
           ) : results.length > 0 ? (
             <div className="space-y-2">
               {results.map((item) => (
@@ -98,18 +99,14 @@ export function SearchBar() {
                     )}
                     <div>
                       <div className="font-medium">{item.name}</div>
-                      <div className="text-sm text-gray-500">
-                        in {item.category.name}
-                      </div>
+                      <div className="text-sm text-gray-500">in {item.category.name}</div>
                     </div>
                   </div>
                 </Link>
               ))}
             </div>
           ) : (
-            <div className="p-4 text-center text-sm text-gray-500">
-              No results found
-            </div>
+            <div className="p-4 text-center text-sm text-gray-500">No results found</div>
           )}
         </Card>
       )}
