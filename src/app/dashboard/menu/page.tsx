@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { formatCurrency } from '@/lib/utils'
 import { Plus, Edit, Trash2, X } from 'lucide-react'
+import Image from 'next/image'
 import { useToast } from '@/hooks/use-toast'
 import {
   Dialog,
@@ -244,8 +245,15 @@ export default function MenuPage() {
         {menuItems.map((item) => (
           <Card key={item.id}>
             {item.imageUrl && (
-              <div className="card-image rounded-t-lg">
-                <img src={item.imageUrl} alt={item.name} className="h-full w-full" />
+              <div className="card-image rounded-t-lg overflow-hidden">
+                <Image
+                  src={item.imageUrl}
+                  alt={item.name}
+                  className="h-full w-full object-cover"
+                  width={400}
+                  height={300}
+                  priority={true}
+                />
               </div>
             )}
             <CardHeader>
