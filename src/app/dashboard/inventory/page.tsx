@@ -25,6 +25,8 @@ export default function InventoryPage() {
   const [inputValues, setInputValues] = useState<{ [id: string]: string }>({});
   // Track loading state for each item
   const [loadingIds, setLoadingIds] = useState<{ [id: string]: boolean }>({});
+  // Search state
+  const [search, setSearch] = useState('');
 
   const fetchInventory = async () => {
     setLoading(true);
@@ -84,6 +86,10 @@ export default function InventoryPage() {
   };
 
   const lowStockItems = items.filter((item) => item.quantity <= item.lowStockThreshold);
+  // Filtered items by search
+  const filteredItems = search.trim() === ''
+    ? items
+    : items.filter(item => item.menuItem.name.toLowerCase().includes(search.trim().toLowerCase()));
 
   if (loading) return <div className="p-8 text-center">Loading inventory...</div>;
   if (error) return <div className="p-8 text-center text-red-500">{error}</div>;
@@ -93,9 +99,18 @@ export default function InventoryPage() {
       <div>
         <h1 className="text-3xl font-bold text-gray-800">Inventory</h1>
         <p className="text-gray-600">Manage inventory and track stock levels</p>
-          <div className="mb-2 text-right text-sm text-gray-700 font-medium">
+        <div className="mb-2 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+          <div className="text-right text-sm text-gray-700 font-medium">
             Total Inventory Items: {items.length}
           </div>
+          <input
+            type="text"
+            placeholder="Search inventory..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="rounded border px-3 py-1 text-sm w-full md:w-64"
+          />
+        </div>
       </div>
 
       {lowStockItems.length > 0 && (
@@ -111,7 +126,7 @@ export default function InventoryPage() {
       )}
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {items.map((item) => {
+        {filteredItems.map((item) => {
           const isLowStock = item.quantity <= item.lowStockThreshold;
           return (
             <Card key={item.id} className={isLowStock ? 'border-amber-300 bg-amber-50' : ''}>
