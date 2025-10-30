@@ -7,15 +7,16 @@ async function getDashboardStats() {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
+  const completedStatus = ['COMPLETED', 'completed'];
   const [
     totalOrders,
     todayRevenue,
     menuItemsCount,
     lowStockItems,
   ] = await Promise.all([
-    prisma.order.count({ where: { status: 'completed', createdAt: { gte: today } } }),
+    prisma.order.count({ where: { status: { in: completedStatus }, createdAt: { gte: today } } }),
     prisma.order.aggregate({
-      where: { status: 'completed', createdAt: { gte: today } },
+      where: { status: { in: completedStatus }, createdAt: { gte: today } },
       _sum: { total: true },
     }),
     prisma.menuItem.count({ where: { available: true } }),

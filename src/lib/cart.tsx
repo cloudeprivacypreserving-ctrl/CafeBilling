@@ -81,23 +81,24 @@ function cartReducer(state: CartState, action: CartAction): CartState {
   }
 }
 
-export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(cartReducer, {
-    items: [],
-    total: 0
-  })
 
-  // Load cart from localStorage on mount
-  useEffect(() => {
-    const savedCart = localStorage.getItem('cart')
-    if (savedCart) {
-      const { items, total } = JSON.parse(savedCart)
-      dispatch({ type: 'CLEAR_CART' })
-      items.forEach((item: CartItem) => {
-        dispatch({ type: 'ADD_ITEM', payload: item })
-      })
+export function CartProvider({ children }: { children: React.ReactNode }) {
+  // Initialize cart state from localStorage (if available)
+  const [state, dispatch] = useReducer(
+    cartReducer,
+    undefined,
+    () => {
+      const savedCart = typeof window !== 'undefined' ? localStorage.getItem('cart') : null;
+      if (savedCart) {
+        try {
+          return JSON.parse(savedCart);
+        } catch {
+          return { items: [], total: 0 };
+        }
+      }
+      return { items: [], total: 0 };
     }
-  }, [])
+  );
 
   // Save cart to localStorage on changes
   useEffect(() => {

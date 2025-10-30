@@ -15,7 +15,7 @@ export async function POST(request: Request) {
         subtotal: Math.round(total),
         tax: Math.round(total * 0.18), // 18% GST
         total: Math.round(total * 1.18), // Including tax
-        status: 'pending',
+  status: 'PENDING',
         orderLines: {
           create: items.map((item: any) => ({
             menuItemId: item.id,

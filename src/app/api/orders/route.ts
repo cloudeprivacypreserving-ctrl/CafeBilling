@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
         tax,
         discount: discountAmount,
         total,
-        status: 'completed',
+  status: 'PENDING',
         userId: session.user.id,
         orderLines: {
           create: orderLines,

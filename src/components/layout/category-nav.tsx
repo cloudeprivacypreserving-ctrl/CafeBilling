@@ -9,36 +9,94 @@ const categories = [
     icon: ShoppingBag,
   },
   {
-    name: 'Hot Beverages',
-    href: '/store/hot-beverages',
-    icon: Coffee,
+    name: "Today's Exclusive Dishes",
+    href: '/store/today-s-exclusive-dishes',
+    icon: Gift,
   },
   {
-    name: 'Cold Drinks',
-    href: '/store/cold-drinks',
-    icon: Beer,
-  },
-  {
-    name: 'Desserts',
-    href: '/store/desserts',
-    icon: IceCream,
-  },
-  {
-    name: 'Snacks',
-    href: '/store/snacks',
-    icon: Cookie,
-  },
-  {
-    name: 'Meals',
-    href: '/store/meals',
+    name: 'Value Meals',
+    href: '/store/value-meals',
     icon: Pizza,
   },
   {
-    name: 'Specials',
-    href: '/store/specials',
-    icon: Gift,
+    name: 'Combos',
+    href: '/store/combos',
+    icon: Cookie,
+  },
+  {
+    name: 'Quick Bites',
+    href: '/store/quick-bites',
+    icon: Cookie,
+  },
+  {
+    name: 'Cosy Special Snacks',
+    href: '/store/cosy-special-snacks',
+    icon: Cookie,
+  },
+  {
+    name: 'Paneer Burgers',
+    href: '/store/burgers-and-sandwiches-paneer-burgers',
+    icon: BurgerIcon,
+  },
+  {
+    name: 'Grilled Sandwiches',
+    href: '/store/burgers-and-sandwiches-grilled-sandwiches',
+    icon: SandwichIcon,
+  },
+  {
+    name: 'Burgers',
+    href: '/store/burgers-and-sandwiches-burgers',
+    icon: BurgerIcon,
+  },
+  {
+    name: 'Pizza',
+    href: '/store/pizza',
+    icon: Pizza,
+  },
+  {
+    name: 'Fries',
+    href: '/store/fries',
+    icon: Cookie,
+  },
+  {
+    name: 'Hot Brew',
+    href: '/store/hot-brew',
+    icon: Coffee,
+  },
+  {
+    name: 'Cold Brews',
+    href: '/store/drinks-beverages-cold-brews',
+    icon: Beer,
+  },
+  {
+    name: 'Shakes',
+    href: '/store/drinks-beverages-shakes',
+    icon: IceCream,
+  },
+  {
+    name: 'Mocktails',
+    href: '/store/mocktails',
+    icon: Beer,
+  },
+  {
+    name: 'Pasta',
+    href: '/store/pasta',
+    icon: Pizza,
+  },
+  {
+    name: 'Maggi',
+    href: '/store/maggi',
+    icon: Pizza,
   },
 ]
+
+// Add missing icons for Burger and Sandwich if not already imported
+function BurgerIcon(props: any) {
+  return <span role="img" aria-label="burger">🍔</span>;
+}
+function SandwichIcon(props: any) {
+  return <span role="img" aria-label="sandwich">🥪</span>;
+}
 
 interface CategoryNavProps {
   className?: string

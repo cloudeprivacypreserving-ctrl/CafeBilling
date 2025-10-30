@@ -12,6 +12,7 @@ interface Order {
   total: number
   createdAt: string
   orderType: string
+  status: string;
 }
 
 export default function ReportsPage() {
@@ -30,7 +31,8 @@ export default function ReportsPage() {
     try {
       const res = await fetch('/api/orders')
       const data = await res.json()
-      setOrders(data.filter((o: Order) => o.total)) // Only completed orders
+      // Only include orders with status COMPLETED (case-insensitive)
+      setOrders(data.filter((o: Order) => o.status && (o.status === 'COMPLETED' || o.status === 'completed')))
     } catch (error) {
       console.error(error)
     } finally {

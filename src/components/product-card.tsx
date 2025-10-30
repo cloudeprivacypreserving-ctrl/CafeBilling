@@ -98,9 +98,22 @@ export function ProductCard({ id, name, description, price, imageUrl, rating, ra
         
         {/* Content */}
         <div className="p-4">
-          <h3 className="font-medium text-gray-900">{name}</h3>
-          {description && <p className="mt-1 text-sm text-gray-500">{description}</p>}
-          
+          <h3
+            className="font-medium text-gray-900 h-10 overflow-hidden text-ellipsis whitespace-nowrap"
+            title={name}
+          >
+            {name}
+          </h3>
+          {description && (
+            <p
+              className="mt-1 text-sm text-gray-500 h-10 overflow-hidden text-ellipsis"
+              style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}
+              title={description}
+            >
+              {description}
+            </p>
+          )}
+
           <div className="mt-2 flex items-center justify-between">
             <div>
               <p className="font-semibold text-gray-900">{formatCurrency(price)}</p>

@@ -10,12 +10,25 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { search } = Object.fromEntries(request.nextUrl.searchParams.entries());
+
+    let where = {};
+    if (search && search.trim() !== "") {
+      where = {
+        name: {
+          contains: search,
+          mode: 'insensitive',
+        },
+      };
+    }
+
     const menuItems = await prisma.menuItem.findMany({
+      where,
       include: { category: true },
       orderBy: { name: 'asc' },
-    })
+    });
 
-    return NextResponse.json(menuItems)
+    return NextResponse.json(menuItems);
   } catch (error) {
     console.error('Error fetching menu items:', error)
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
