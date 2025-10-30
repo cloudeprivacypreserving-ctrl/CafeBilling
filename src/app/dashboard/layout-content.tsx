@@ -21,7 +21,7 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
   { name: 'Menu', href: '/dashboard/menu', icon: Menu },
   { name: 'Orders', href: '/dashboard/orders', icon: ShoppingCart },
-  { name: 'New Order', href: '/dashboard/orders/new', icon: ShoppingCart },
+  { name: 'New Order', href: '/dashboard/orders/new', icon: Coffee },
   { name: 'Inventory', href: '/dashboard/inventory', icon: Package },
   { name: 'Reports', href: '/dashboard/reports', icon: BarChart3 },
   { name: 'Settings', href: '/dashboard/settings', icon: Settings },

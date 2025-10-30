@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -16,9 +16,43 @@ export default function SettingsPage() {
     taxRate: '18',
     currency: '₹',
     receiptFooter: '',
-  })
-  const [saving, setSaving] = useState(false)
-  const { toast } = useToast()
+  });
+  const [saving, setSaving] = useState(false);
+  const [qrCodePath, setQrCodePath] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    fetch('/api/settings/qr-code')
+      .then(res => res.json())
+      .then(data => setQrCodePath(data.qrCodePath));
+  }, []);
+  const handleQrUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('qrCode', file);
+    try {
+      const res = await fetch('/api/settings/upload-qr', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.path) {
+        setQrCodePath(data.path);
+        toast({ title: 'QR Code uploaded', description: 'QR code image updated.' });
+      } else {
+        throw new Error(data.error || 'Upload failed');
+      }
+    } catch (err: any) {
+      toast({ title: 'Error', description: err.message || 'Failed to upload QR code', variant: 'destructive' });
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -56,6 +90,33 @@ export default function SettingsPage() {
       </div>
 
       <form onSubmit={handleSubmit}>
+        <Card>
+          <CardHeader>
+            <CardTitle>Payment QR Code</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label>Upload QR Code</Label>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleQrUpload}
+                className="block mt-2"
+                disabled={uploading}
+              />
+              {uploading && <div className="text-xs text-gray-500 mt-1">Uploading...</div>}
+            </div>
+            {qrCodePath && (
+              <div className="mt-2">
+                <Label>Current QR Code:</Label>
+                <div className="mt-1">
+                  <img src={qrCodePath} alt="QR Code" className="w-32 h-32 border rounded bg-white" />
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
         <Card>
           <CardHeader>
             <CardTitle>Business Information</CardTitle>
