@@ -25,20 +25,40 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
   // Get category name from slug
   const getCategoryName = (slug: string) => {
     switch (slug) {
+      case 'all':
+        return 'all'
+      case 'todays-exclusive-dishes':
+        return menuCategories.TODAYS_EXCLUSIVE
+      case 'value-meals':
+        return menuCategories.VALUE_MEALS
+      case 'combos':
+        return menuCategories.COMBOS
+      case 'quick-bites':
+        return menuCategories.QUICK_BITES
+      case 'cosy-special-snacks':
+        return menuCategories.COSY_SPECIAL_SNACKS
+      case 'paneer-burgers':
+        return menuCategories.BURGERS_PANEER
+      case 'grilled-sandwiches':
+        return menuCategories.GRILLED_SANDWICHES
+      case 'burgers':
+        return menuCategories.BURGERS
+      case 'pizza':
+        return menuCategories.PIZZA
+      case 'fries':
+        return menuCategories.FRIES
       case 'hot-brew':
         return menuCategories.HOT_BREW
       case 'cold-brews':
         return menuCategories.COLD_BREWS
       case 'shakes':
         return menuCategories.SHAKES
-      case 'quick-bites':
-        return menuCategories.QUICK_BITES
-      case 'burgers':
-        return menuCategories.BURGERS
-      case 'pizza':
-        return menuCategories.PIZZA
-      case 'value-meals':
-        return menuCategories.VALUE_MEALS
+      case 'mocktails':
+        return menuCategories.MOCKTAILS
+      case 'pasta':
+        return menuCategories.PASTA
+      case 'maggi':
+        return menuCategories.MAGGI
       case 'bestsellers':
         return 'Bestsellers'
       case 'new':
@@ -67,7 +87,7 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
             (a: MenuItem, b: MenuItem) =>
               new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime()
           )
-        } else if (categoryName) {
+        } else if (categoryName && categoryName !== 'all') {
           filteredItems = filteredItems.filter((item) => item.category.name === categoryName)
         }
 
