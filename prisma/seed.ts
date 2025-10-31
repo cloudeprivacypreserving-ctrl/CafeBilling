@@ -1,5 +1,7 @@
 import { PrismaClient, UserRole } from '@prisma/client'
 import bcrypt from 'bcryptjs'
+import { menuItemsData } from './menu-items.js'
+
 const menuCategories = {
   TODAYS_EXCLUSIVE: "Today's Exclusive Dishes",
   VALUE_MEALS: 'Value Meals',
@@ -78,8 +80,6 @@ async function main() {
     return acc
   }, {})
 
-  // Import menu items from separate file
-  const { menuItemsData } = await import('./menu-items')
 
   // Add a placeholder image URL for all items
   const placeholderImage = 'https://placehold.co/400x400?text=Coming+Soon'
