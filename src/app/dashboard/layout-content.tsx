@@ -1,11 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useSession } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { signOut } from 'next-auth/react'
 import {
   Home,
   Menu,
@@ -36,7 +35,11 @@ export default function DashboardLayoutContent({ children }: { children: React.R
     if (status === 'unauthenticated') {
       router.push('/login')
     }
-  }, [status, router])
+    if (status === 'authenticated' && session?.user?.role !== 'ADMIN') {
+      // If not admin, sign out and redirect
+      signOut({ callbackUrl: '/login' })
+    }
+  }, [status, session, router])
 
   if (status === 'loading' || !session) {
     return (
