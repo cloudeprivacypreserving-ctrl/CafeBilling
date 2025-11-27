@@ -76,6 +76,7 @@ export default function InventoryPage() {
     // Clean input: remove leading zeros, empty string becomes 0
     const cleaned = newQtyStr.replace(/^0+(?!$)/, '')
     const newQty = cleaned === '' ? 0 : Number(cleaned)
+    console.log('Updating stock:', { itemId, newQty })
     setInputValues((prev) => ({ ...prev, [itemId]: String(newQty) }))
     setLoadingIds((prev) => ({ ...prev, [itemId]: true }))
     try {
@@ -84,22 +85,27 @@ export default function InventoryPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: itemId, quantity: newQty }),
       })
+      console.log('Update response status:', res.status)
       if (!res.ok) {
         const err = await res.json()
+        console.error('Update error response:', err)
         toast({
           title: 'Error',
           description: err.error || 'Failed to update inventory',
           variant: 'destructive',
         })
       } else {
-        // Optimistically update UI
-        setItems((prev) => prev.map((i) => (i.id === itemId ? { ...i, quantity: newQty } : i)))
+        const result = await res.json()
+        console.log('Update success:', result)
+        toast({ title: 'Success', description: 'Inventory updated!' })
+        // Refresh inventory immediately to get fresh data
+        await fetchInventory()
       }
     } catch (e) {
+      console.error('Update exception:', e)
       toast({ title: 'Error', description: 'Failed to update inventory', variant: 'destructive' })
     } finally {
       setLoadingIds((prev) => ({ ...prev, [itemId]: false }))
-      fetchInventory()
     }
   }
 
