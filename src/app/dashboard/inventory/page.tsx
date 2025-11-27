@@ -32,6 +32,27 @@ export default function InventoryPage() {
     try {
       const res = await fetch('/api/inventory')
       const data = await res.json()
+      console.log('API /api/inventory response:', data)
+      if (!Array.isArray(data)) {
+        setError('API returned unexpected data shape')
+        toast({
+          title: 'Error',
+          description: 'API returned unexpected data shape',
+          variant: 'destructive',
+        })
+        return
+      }
+      // Check for missing menuItem
+      const hasMenuItem = data.every((item: any) => item.menuItem && item.menuItem.name)
+      if (!hasMenuItem) {
+        setError('Some inventory items are missing menuItem info')
+        toast({
+          title: 'Error',
+          description: 'Some inventory items are missing menuItem info',
+          variant: 'destructive',
+        })
+        return
+      }
       setItems(data)
       // Sync input values with fetched data
       const newInputValues: { [id: string]: string } = {}
@@ -41,6 +62,7 @@ export default function InventoryPage() {
       setInputValues(newInputValues)
     } catch (e) {
       setError('Failed to load inventory')
+      toast({ title: 'Error', description: 'Failed to load inventory', variant: 'destructive' })
     } finally {
       setLoading(false)
     }
@@ -82,8 +104,31 @@ export default function InventoryPage() {
   }
 
   const createAllInventory = async () => {
-    await fetch('/api/inventory/create-all', { method: 'POST' })
-    fetchInventory()
+    try {
+      const res = await fetch('/api/inventory/create-all', { method: 'POST' })
+      console.log('Create inventory response:', res.status, res.statusText)
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        console.error('Create inventory error:', err)
+        toast({
+          title: 'Error',
+          description: err.error || 'Failed to create inventory records',
+          variant: 'destructive',
+        })
+      } else {
+        const result = await res.json()
+        console.log('Create inventory success:', result)
+        toast({ title: 'Success', description: 'Inventory records created!' })
+        fetchInventory()
+      }
+    } catch (e) {
+      console.error('Create inventory exception:', e)
+      toast({
+        title: 'Error',
+        description: 'Failed to create inventory records',
+        variant: 'destructive',
+      })
+    }
   }
 
   const lowStockItems = items.filter((item) => item.quantity <= item.lowStockThreshold)

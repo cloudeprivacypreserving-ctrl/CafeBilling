@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { formatCurrency, formatDate } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
@@ -34,7 +34,7 @@ export default function OrdersPage() {
   const [loading, setLoading] = useState(true)
   const { toast } = useToast()
 
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       const res = await fetch('/api/orders')
       const data = await res.json()
@@ -49,11 +49,11 @@ export default function OrdersPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [toast])
 
   useEffect(() => {
     fetchOrders()
-  }, [toast])
+  }, [fetchOrders])
 
   const handleStatusUpdate = async (orderId: string, status: Order['status']) => {
     try {
