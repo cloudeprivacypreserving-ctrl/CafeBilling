@@ -88,7 +88,7 @@ export function ProductCard({
       >
         {/* Image */}
         {imageUrl && (
-          <div className="relative h-48 w-full overflow-hidden bg-gray-100">
+          <div className="relative h-40 w-full overflow-hidden bg-gray-100">
             <Image
               src={imageUrl}
               alt={name}
@@ -175,7 +175,7 @@ export function ProductCard({
 
           <div className="grid gap-4">
             {imageUrl && (
-              <div className="relative h-64 w-full overflow-hidden rounded-lg bg-gray-100">
+              <div className="relative h-48 w-full overflow-hidden rounded-lg bg-gray-100">
                 <Image src={imageUrl} alt={name} fill className="object-cover" />
               </div>
             )}

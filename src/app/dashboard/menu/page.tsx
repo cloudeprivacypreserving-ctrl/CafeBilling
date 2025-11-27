@@ -245,7 +245,7 @@ export default function MenuPage() {
         {menuItems.map((item) => (
           <Card key={item.id}>
             {item.imageUrl && (
-              <div className="relative h-48 w-full overflow-hidden rounded-t-lg bg-gray-100">
+              <div className="relative h-40 w-full overflow-hidden rounded-t-lg bg-gray-100">
                 <Image src={item.imageUrl} alt={item.name} className="object-cover" fill />
               </div>
             )}
