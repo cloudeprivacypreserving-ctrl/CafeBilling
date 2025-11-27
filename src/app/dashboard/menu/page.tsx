@@ -245,15 +245,8 @@ export default function MenuPage() {
         {menuItems.map((item) => (
           <Card key={item.id}>
             {item.imageUrl && (
-              <div className="card-image rounded-t-lg overflow-hidden">
-                <Image
-                  src={item.imageUrl}
-                  alt={item.name}
-                  className="h-full w-full object-cover"
-                  width={400}
-                  height={300}
-                  priority={true}
-                />
+              <div className="relative h-48 w-full overflow-hidden rounded-t-lg bg-gray-100">
+                <Image src={item.imageUrl} alt={item.name} className="object-cover" fill />
               </div>
             )}
             <CardHeader>
