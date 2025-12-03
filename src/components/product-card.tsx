@@ -46,6 +46,11 @@ export function ProductCard({
   const { dispatch } = useCart()
   const { toast } = useToast()
 
+  // Debug logging for image URL
+  if (name.includes('Aloo Tikki Burger')) {
+    console.log(`${name} - imageUrl:`, imageUrl)
+  }
+
   const handleQuantityChange = (delta: number) => {
     setQuantity((current) => Math.max(1, current + delta))
   }
@@ -94,6 +99,9 @@ export function ProductCard({
               alt={name}
               fill
               className="object-cover transition-transform group-hover:scale-105"
+              onError={(e) => {
+                console.error(`Image failed to load for ${name}:`, imageUrl, e)
+              }}
             />
             {available && (
               <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 opacity-0 transition-all group-hover:bg-opacity-20 group-hover:opacity-100">
