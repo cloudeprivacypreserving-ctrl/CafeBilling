@@ -88,7 +88,7 @@ export function ProductCard({
       >
         {/* Image */}
         {imageUrl && (
-          <div className="relative h-40 w-full overflow-hidden bg-gray-100">
+          <div className="relative h-32 w-full overflow-hidden bg-gray-100">
             <Image
               src={imageUrl}
               alt={name}
@@ -106,16 +106,16 @@ export function ProductCard({
         )}
 
         {/* Content */}
-        <div className="p-4">
+        <div className="p-2">
           <h3
-            className="font-medium text-gray-900 h-10 overflow-hidden text-ellipsis whitespace-nowrap"
+            className="font-medium text-gray-900 h-8 overflow-hidden text-ellipsis whitespace-nowrap text-sm"
             title={name}
           >
             {name}
           </h3>
           {description && (
             <p
-              className="mt-1 text-sm text-gray-500 h-10 overflow-hidden text-ellipsis"
+              className="mt-1 text-xs text-gray-500 h-6 overflow-hidden text-ellipsis"
               style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}
               title={description}
             >
@@ -123,9 +123,9 @@ export function ProductCard({
             </p>
           )}
 
-          <div className="mt-2 flex items-center justify-between">
+          <div className="mt-2 flex items-center justify-between gap-1">
             <div>
-              <p className="font-semibold text-gray-900">{formatCurrency(price)}</p>
+              <p className="font-semibold text-gray-900 text-sm">{formatCurrency(price)}</p>
               {rating && (
                 <div className="mt-1 flex items-center">
                   <div className="flex items-center">
@@ -175,7 +175,7 @@ export function ProductCard({
 
           <div className="grid gap-4">
             {imageUrl && (
-              <div className="relative h-48 w-full overflow-hidden rounded-lg bg-gray-100">
+              <div className="relative h-40 w-full overflow-hidden rounded-lg bg-gray-100">
                 <Image src={imageUrl} alt={name} fill className="object-cover" />
               </div>
             )}

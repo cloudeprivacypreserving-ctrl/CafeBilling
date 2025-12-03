@@ -36,8 +36,8 @@ export function MenuSection({ title, items, seeAllHref }: MenuSectionProps) {
           See All &rarr;
         </Link>
       </div>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {items.slice(0, 4).map((item) => (
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        {items.slice(0, 12).map((item) => (
           <ProductCard key={item.id} {...item} />
         ))}
       </div>
