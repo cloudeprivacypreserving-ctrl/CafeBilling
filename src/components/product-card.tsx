@@ -92,13 +92,14 @@ export function ProductCard({
         onClick={() => available && setShowQuickView(true)}
       >
         {/* Image */}
-        {imageUrl && (
-          <div className="relative h-32 w-full overflow-hidden bg-gray-100">
+        {imageUrl ? (
+          <div className="relative h-32 w-full overflow-hidden bg-gray-100 rounded-t-lg">
             <Image
               src={imageUrl}
               alt={name}
               fill
               className="object-cover transition-transform group-hover:scale-105"
+              sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
               onError={(e) => {
                 console.error(`Image failed to load for ${name}:`, imageUrl, e)
               }}
@@ -110,6 +111,10 @@ export function ProductCard({
                 </span>
               </div>
             )}
+          </div>
+        ) : (
+          <div className="relative h-32 w-full overflow-hidden bg-gray-200 rounded-t-lg flex items-center justify-center">
+            <span className="text-gray-500 text-xs text-center p-2">No Image</span>
           </div>
         )}
 
@@ -182,9 +187,19 @@ export function ProductCard({
           </DialogHeader>
 
           <div className="grid gap-4">
-            {imageUrl && (
+            {imageUrl ? (
               <div className="relative h-40 w-full overflow-hidden rounded-lg bg-gray-100">
-                <Image src={imageUrl} alt={name} fill className="object-cover" />
+                <Image
+                  src={imageUrl}
+                  alt={name}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 90vw, 400px"
+                />
+              </div>
+            ) : (
+              <div className="h-40 w-full bg-gray-200 rounded-lg flex items-center justify-center">
+                <span className="text-gray-500">No Image Available</span>
               </div>
             )}
 

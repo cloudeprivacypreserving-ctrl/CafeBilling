@@ -241,34 +241,54 @@ export default function MenuPage() {
         </Button>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {menuItems.map((item) => (
-          <Card key={item.id}>
-            {item.imageUrl && (
-              <div className="relative h-40 w-full overflow-hidden rounded-t-lg bg-gray-100">
-                <Image src={item.imageUrl} alt={item.name} className="object-cover" fill />
+          <Card key={item.id} className="overflow-hidden">
+            {item.imageUrl ? (
+              <div className="relative h-28 w-full overflow-hidden bg-gray-100">
+                <Image
+                  src={item.imageUrl}
+                  alt={item.name}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                />
+              </div>
+            ) : (
+              <div className="h-28 w-full bg-gray-200 flex items-center justify-center">
+                <span className="text-gray-500 text-xs">No Image</span>
               </div>
             )}
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <CardTitle>{item.name}</CardTitle>
-                <div className="flex space-x-2">
-                  <Button size="sm" variant="ghost" onClick={() => handleEdit(item)}>
-                    <Edit className="h-4 w-4" />
+            <CardHeader className="p-3">
+              <div className="flex items-start justify-between gap-2">
+                <CardTitle className="text-sm font-medium line-clamp-2">{item.name}</CardTitle>
+                <div className="flex space-x-1 flex-shrink-0">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-7 w-7 p-0"
+                    onClick={() => handleEdit(item)}
+                  >
+                    <Edit className="h-3 w-3" />
                   </Button>
-                  <Button size="sm" variant="ghost" onClick={() => handleDelete(item.id)}>
-                    <Trash2 className="h-4 w-4" />
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-7 w-7 p-0"
+                    onClick={() => handleDelete(item.id)}
+                  >
+                    <Trash2 className="h-3 w-3" />
                   </Button>
                 </div>
               </div>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <p className="text-sm text-gray-600">{item.description}</p>
+            <CardContent className="p-3 pt-0">
+              <div className="space-y-1.5">
+                <p className="text-xs text-gray-600 line-clamp-2">{item.description}</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-lg font-bold">{formatCurrency(item.price)}</span>
+                  <span className="text-sm font-bold">{formatCurrency(item.price)}</span>
                   <span
-                    className={`rounded-full px-2 py-1 text-xs ${
+                    className={`rounded-full px-2 py-0.5 text-xs ${
                       item.available ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                     }`}
                   >
