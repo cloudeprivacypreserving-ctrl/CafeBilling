@@ -38,6 +38,7 @@ export default function MenuPage() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
+  const [searchQuery, setSearchQuery] = useState('')
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null)
   const [formData, setFormData] = useState({
@@ -51,6 +52,14 @@ export default function MenuPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [uploadingImage, setUploadingImage] = useState(false)
   const { toast } = useToast()
+
+  // Filter menu items based on search query
+  const filteredMenuItems = menuItems.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.category.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
 
   useEffect(() => {
     fetchMenuItems()
@@ -241,8 +250,34 @@ export default function MenuPage() {
         </Button>
       </div>
 
+      {/* Search Bar */}
+      <div className="flex items-center gap-4">
+        <div className="flex-1 max-w-md">
+          <Input
+            placeholder="Search menu items..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full"
+          />
+        </div>
+        {searchQuery && (
+          <Button variant="outline" onClick={() => setSearchQuery('')} className="flex-shrink-0">
+            Clear
+          </Button>
+        )}
+      </div>
+
+      {/* Results count */}
+      <div className="text-sm text-gray-600">
+        {searchQuery
+          ? `Found ${filteredMenuItems.length} item${
+              filteredMenuItems.length !== 1 ? 's' : ''
+            } matching "${searchQuery}"`
+          : `Total ${menuItems.length} menu item${menuItems.length !== 1 ? 's' : ''}`}
+      </div>
+
       <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-        {menuItems.map((item) => (
+        {filteredMenuItems.map((item) => (
           <Card key={item.id} className="overflow-hidden border rounded-lg max-w-sm">
             <div className="aspect-[4/3] w-full overflow-hidden bg-gray-100 relative">
               {item.imageUrl ? (
@@ -304,11 +339,24 @@ export default function MenuPage() {
         ))}
       </div>
 
-      {menuItems.length === 0 && (
+      {menuItems.length === 0 && !loading && (
         <Card>
           <CardContent className="pt-6">
             <div className="text-center text-gray-500">
               <p>No menu items found. Add your first item to get started.</p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {menuItems.length > 0 && filteredMenuItems.length === 0 && searchQuery && (
+        <Card>
+          <CardContent className="pt-6">
+            <div className="text-center text-gray-500">
+              <p>No menu items match your search for &quot;{searchQuery}&quot;.</p>
+              <Button variant="outline" onClick={() => setSearchQuery('')} className="mt-2">
+                Clear search
+              </Button>
             </div>
           </CardContent>
         </Card>
