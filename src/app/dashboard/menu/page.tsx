@@ -241,27 +241,29 @@ export default function MenuPage() {
         </Button>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {menuItems.map((item) => (
-          <Card key={item.id} className="overflow-hidden">
-            {item.imageUrl ? (
-              <div className="relative h-28 w-full overflow-hidden bg-gray-100">
+          <Card key={item.id} className="overflow-hidden border rounded-lg max-w-sm">
+            <div className="aspect-[4/3] w-full overflow-hidden bg-gray-100 relative">
+              {item.imageUrl ? (
                 <Image
                   src={item.imageUrl}
                   alt={item.name}
                   fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                  className="object-cover object-center"
+                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, (max-width: 1280px) 20vw, 200px"
                 />
-              </div>
-            ) : (
-              <div className="h-28 w-full bg-gray-200 flex items-center justify-center">
-                <span className="text-gray-500 text-xs">No Image</span>
-              </div>
-            )}
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="text-gray-500 text-xs">No Image</span>
+                </div>
+              )}
+            </div>
             <CardHeader className="p-3">
               <div className="flex items-start justify-between gap-2">
-                <CardTitle className="text-sm font-medium line-clamp-2">{item.name}</CardTitle>
+                <CardTitle className="text-sm font-medium line-clamp-2 flex-1">
+                  {item.name}
+                </CardTitle>
                 <div className="flex space-x-1 flex-shrink-0">
                   <Button
                     size="sm"
@@ -283,19 +285,19 @@ export default function MenuPage() {
               </div>
             </CardHeader>
             <CardContent className="p-3 pt-0">
-              <div className="space-y-1.5">
+              <div className="space-y-2">
                 <p className="text-xs text-gray-600 line-clamp-2">{item.description}</p>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2">
                   <span className="text-sm font-bold">{formatCurrency(item.price)}</span>
                   <span
-                    className={`rounded-full px-2 py-0.5 text-xs ${
+                    className={`rounded-full px-2 py-1 text-xs flex-shrink-0 ${
                       item.available ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                     }`}
                   >
                     {item.available ? 'Available' : 'Unavailable'}
                   </span>
                 </div>
-                <p className="text-xs text-gray-500">{item.category.name}</p>
+                <p className="text-xs text-gray-500 truncate">{item.category.name}</p>
               </div>
             </CardContent>
           </Card>
