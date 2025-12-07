@@ -44,7 +44,7 @@ export async function POST(request: Request) {
           subtotal: newSubtotal,
           tax: newTax,
           total: newTotal,
-          status: 'IN_PROGRESS',
+          status: 'PENDING',
         },
         include: {
           orderLines: {
