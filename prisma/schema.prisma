@@ -107,12 +107,13 @@ model Order {
   orderType       OrderType
   paymentMethod   PaymentMethod?
   customerName    String?
+  customerPhoneNumber String? // NEW: Mobile number for order tracking
   tableNumber     String?
   subtotal        Int           // in paise/cents
   tax             Int           // in paise/cents
   discount        Int           @default(0) // in paise/cents
   total           Int           // in paise/cents
-  status          String        @default("pending") // pending, completed, cancelled
+  status          String        @default("PENDING") // PENDING, IN_PROGRESS, COMPLETED, CANCELLED
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 
@@ -120,6 +121,8 @@ model Order {
   user            User?         @relation(fields: [userId], references: [id])
   orderLines      OrderLine[]
 
+  // Composite index for quick lookup of active orders by phone number
+  @@index([customerPhoneNumber, status])
   @@map("orders")
 }
 

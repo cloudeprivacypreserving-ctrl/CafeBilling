@@ -8,6 +8,7 @@ import { formatCurrency } from '@/lib/utils'
 import { useCart } from '@/lib/cart'
 import { useToast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
+import { PhoneNumberInput } from '@/components/phone-number-input'
 
 export function CartSidebar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -15,6 +16,9 @@ export function CartSidebar() {
   const [showSuccess, setShowSuccess] = useState(false)
   const [showWhatsapp, setShowWhatsapp] = useState(false)
   const [mobile, setMobile] = useState('')
+  const [existingOrderId, setExistingOrderId] = useState<string | null>(null)
+  const [existingOrderDetails, setExistingOrderDetails] = useState<any | null>(null)
+  const [orderType, setOrderType] = useState<'DINE_IN' | 'TAKEAWAY'>('TAKEAWAY')
   const { state, dispatch, placeOrder } = useCart()
   const { toast } = useToast()
   const router = useRouter()
@@ -28,9 +32,19 @@ export function CartSidebar() {
   }
 
   const handleCheckout = async () => {
+    if (!mobile) {
+      toast({
+        title: 'Mobile number required',
+        description: 'Please enter your mobile number to continue.',
+        variant: 'destructive',
+      })
+      return
+    }
+
     setIsProcessing(true)
     try {
-      await placeOrder()
+      // Call the updated placeOrder with phone number and existing order ID
+      await placeOrder(mobile, existingOrderId)
       setShowSuccess(true)
       setShowWhatsapp(true)
     } catch (error) {
@@ -42,6 +56,11 @@ export function CartSidebar() {
     } finally {
       setIsProcessing(false)
     }
+  }
+
+  const handleExistingOrderFound = (orderId: string, orderDetails: any) => {
+    setExistingOrderId(orderId)
+    setExistingOrderDetails(orderDetails)
   }
 
   return (
@@ -156,26 +175,89 @@ export function CartSidebar() {
 
                   {/* Footer */}
                   {state.items.length > 0 && (
-                    <div className="border-t p-4">
-                      <div className="mb-4 flex items-center justify-between text-lg font-semibold">
-                        <span>Total</span>
-                        <span>{formatCurrency(state.total)}</span>
+                    <div className="border-t p-4 space-y-4">
+                      {/* Order Type Selection */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Order Type *
+                        </label>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => setOrderType('DINE_IN')}
+                            className={`flex-1 py-2 px-3 rounded-lg border-2 transition-colors ${
+                              orderType === 'DINE_IN'
+                                ? 'border-blue-500 bg-blue-50 text-blue-700 font-medium'
+                                : 'border-gray-300 hover:border-gray-400'
+                            }`}
+                          >
+                            Dine In
+                          </button>
+                          <button
+                            onClick={() => setOrderType('TAKEAWAY')}
+                            className={`flex-1 py-2 px-3 rounded-lg border-2 transition-colors ${
+                              orderType === 'TAKEAWAY'
+                                ? 'border-blue-500 bg-blue-50 text-blue-700 font-medium'
+                                : 'border-gray-300 hover:border-gray-400'
+                            }`}
+                          >
+                            Takeaway
+                          </button>
+                        </div>
                       </div>
-                      <Button
-                        className="w-full"
-                        size="lg"
-                        onClick={handleCheckout}
-                        disabled={isProcessing}
-                      >
-                        {isProcessing ? (
-                          <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Processing...
-                          </>
-                        ) : (
-                          'Proceed to Checkout'
-                        )}
-                      </Button>
+
+                      {/* Phone Number Input */}
+                      <PhoneNumberInput
+                        onPhoneChange={setMobile}
+                        onExistingOrderFound={handleExistingOrderFound}
+                        orderType={orderType}
+                      />
+
+                      {/* Show suggestion for existing order */}
+                      {existingOrderDetails && (
+                        <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                          <p className="text-sm font-medium text-amber-900 mb-2">
+                            Have existing items?
+                          </p>
+                          <p className="text-xs text-amber-800 mb-3">
+                            These new items will be added to your existing order #
+                            {existingOrderDetails.orderNumber}
+                          </p>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => {
+                                setExistingOrderId(null)
+                                setExistingOrderDetails(null)
+                              }}
+                              className="flex-1 py-1 px-2 bg-white border border-amber-300 text-amber-800 text-xs rounded hover:bg-amber-50"
+                            >
+                              Create New Order
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Totals */}
+                      <div className="pt-2 border-t">
+                        <div className="mb-4 flex items-center justify-between text-lg font-semibold">
+                          <span>Total</span>
+                          <span>{formatCurrency(state.total)}</span>
+                        </div>
+                        <Button
+                          className="w-full"
+                          size="lg"
+                          onClick={handleCheckout}
+                          disabled={isProcessing || !mobile}
+                        >
+                          {isProcessing ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              Processing...
+                            </>
+                          ) : (
+                            `${existingOrderId ? 'Add to Order' : 'Place Order'}`
+                          )}
+                        </Button>
+                      </div>
                     </div>
                   )}
                 </>

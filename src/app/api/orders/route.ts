@@ -40,7 +40,16 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { orderType, customerName, tableNumber, items, paymentMethod, discount } = body
+    const {
+      orderType,
+      customerName,
+      customerPhoneNumber,
+      tableNumber,
+      items,
+      paymentMethod,
+      discount,
+      existingOrderId, // If customer is adding to existing order
+    } = body
 
     if (!items || items.length === 0) {
       return NextResponse.json({ error: 'Order must have at least one item' }, { status: 400 })
@@ -62,11 +71,71 @@ export async function POST(request: NextRequest) {
     const tax = Math.round(afterDiscount * taxRate)
     const total = afterDiscount + tax
 
+    // If existingOrderId provided, add items to existing order
+    if (existingOrderId) {
+      // Verify the existing order belongs to same customer
+      const existingOrder = await prisma.order.findUnique({
+        where: { id: existingOrderId },
+        include: { orderLines: true },
+      })
+
+      if (!existingOrder) {
+        return NextResponse.json({ error: 'Existing order not found' }, { status: 404 })
+      }
+
+      // Add new items to existing order
+      await prisma.orderLine.createMany({
+        data: orderLines.map((line: any) => ({
+          ...line,
+          orderId: existingOrderId,
+        })),
+      })
+
+      // Recalculate order totals
+      const allOrderLines = await prisma.orderLine.findMany({
+        where: { orderId: existingOrderId },
+      })
+
+      const newSubtotal = allOrderLines.reduce((sum, line) => sum + line.subtotal, 0)
+      const newAfterDiscount = newSubtotal - discountAmount
+      const newTax = Math.round(newAfterDiscount * taxRate)
+      const newTotal = newAfterDiscount + newTax
+
+      const updatedOrder = await prisma.order.update({
+        where: { id: existingOrderId },
+        data: {
+          subtotal: newSubtotal,
+          tax: newTax,
+          discount: discountAmount,
+          total: newTotal,
+          status: 'IN_PROGRESS',
+          updatedAt: new Date(),
+        },
+        include: {
+          orderLines: {
+            include: {
+              menuItem: {
+                include: { category: true },
+              },
+            },
+          },
+        },
+      })
+
+      return NextResponse.json({
+        order: updatedOrder,
+        message: 'Items added to existing order successfully',
+        isExistingOrder: true,
+      })
+    }
+
+    // Create new order
     const order = await prisma.order.create({
       data: {
         orderNumber: generateOrderNumber(),
         orderType,
         customerName,
+        customerPhoneNumber: customerPhoneNumber?.trim() || null,
         tableNumber,
         paymentMethod,
         subtotal,
@@ -90,7 +159,11 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    return NextResponse.json(order)
+    return NextResponse.json({
+      order,
+      message: 'New order created successfully',
+      isExistingOrder: false,
+    })
   } catch (error) {
     console.error('Error creating order:', error)
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
