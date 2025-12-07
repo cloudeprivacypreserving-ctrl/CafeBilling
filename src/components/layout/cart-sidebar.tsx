@@ -43,10 +43,21 @@ export function CartSidebar() {
 
     setIsProcessing(true)
     try {
-      // Call the updated placeOrder with phone number and existing order ID
-      await placeOrder(mobile, existingOrderId)
+      // Call the updated placeOrder with phone number, existing order ID, and order type
+      await placeOrder(mobile, existingOrderId, orderType)
       setShowSuccess(true)
       setShowWhatsapp(true)
+
+      // Auto-close the success message after 2 seconds
+      setTimeout(() => {
+        setShowSuccess(false)
+        setIsOpen(false)
+        // Reset all form states
+        setMobile('')
+        setExistingOrderId(null)
+        setExistingOrderDetails(null)
+        setOrderType('TAKEAWAY')
+      }, 2000)
     } catch (error) {
       toast({
         title: 'Failed to place order',

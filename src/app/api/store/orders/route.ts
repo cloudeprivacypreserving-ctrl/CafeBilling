@@ -5,7 +5,7 @@ import { generateOrderNumber } from '@/lib/utils'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { items, total, customerPhoneNumber, existingOrderId } = body
+    const { items, total, customerPhoneNumber, existingOrderId, orderType } = body
 
     // If adding to existing order
     if (existingOrderId) {
@@ -66,7 +66,7 @@ export async function POST(request: Request) {
     const order = await prisma.order.create({
       data: {
         orderNumber: generateOrderNumber(),
-        orderType: 'TAKEAWAY',
+        orderType: orderType || 'TAKEAWAY',
         customerPhoneNumber: customerPhoneNumber?.trim() || null,
         subtotal: Math.round(total),
         tax: Math.round(total * 0.18), // 18% GST

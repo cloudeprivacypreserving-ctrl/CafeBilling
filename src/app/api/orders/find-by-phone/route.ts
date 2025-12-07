@@ -18,14 +18,13 @@ export async function POST(req: NextRequest) {
     }
 
     // Find active order (PENDING or IN_PROGRESS status)
+    // Search across all order types to allow customers to add items regardless of order type selection
     const existingOrder = await prisma.order.findFirst({
       where: {
         customerPhoneNumber: phoneNumber.trim(),
         status: {
           in: ['PENDING', 'IN_PROGRESS'],
         },
-        // Optionally filter by order type (DINE_IN or TAKEAWAY)
-        ...(orderType && { orderType }),
       },
       include: {
         orderLines: {

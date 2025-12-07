@@ -24,7 +24,11 @@ type CartAction =
 const CartContext = createContext<{
   state: CartState
   dispatch: React.Dispatch<CartAction>
-  placeOrder: (phoneNumber?: string, existingOrderId?: string | null) => Promise<void>
+  placeOrder: (
+    phoneNumber?: string,
+    existingOrderId?: string | null,
+    orderType?: 'DINE_IN' | 'TAKEAWAY'
+  ) => Promise<void>
 } | null>(null)
 
 function cartReducer(state: CartState, action: CartAction): CartState {
@@ -98,7 +102,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('cart', JSON.stringify(state))
   }, [state])
 
-  const placeOrder = async (phoneNumber?: string, existingOrderId?: string | null) => {
+  const placeOrder = async (
+    phoneNumber?: string,
+    existingOrderId?: string | null,
+    orderType?: 'DINE_IN' | 'TAKEAWAY'
+  ) => {
     try {
       const response = await fetch('/api/store/orders', {
         method: 'POST',
@@ -110,6 +118,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           total: state.total,
           customerPhoneNumber: phoneNumber,
           existingOrderId: existingOrderId || undefined,
+          orderType: orderType || 'TAKEAWAY',
         }),
       })
 
