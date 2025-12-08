@@ -89,174 +89,193 @@ export default function OrderDetailPage() {
 
   return (
     <div className="space-y-6">
-      {/* Hidden Receipt for Printing - Thermal Printer Format */}
-      <div
-        id="thermal-receipt"
-        style={{
-          display: 'none',
-          width: '80mm',
-          fontFamily: "'Courier New', monospace",
-          fontSize: '12px',
-          padding: '0',
-          margin: '0',
-          textAlign: 'center',
-          backgroundColor: 'white',
-          color: 'black',
-        }}
-      >
-        <style>{`
-          @media print {
-            * {
-              margin: 0 !important;
-              padding: 0 !important;
-            }
-            body {
-              margin: 0 !important;
-              padding: 0 !important;
-              width: 80mm !important;
-            }
-            #thermal-receipt {
-              display: block !important;
-              width: 80mm !important;
-              margin: 0 !important;
-              padding: 0 !important;
-              page-break-after: avoid !important;
-            }
-            #thermal-receipt * {
-              margin: 0 !important;
-              padding: 0 !important;
-            }
-            .no-print {
-              display: none !important;
-            }
+      <style>{`
+        @media print {
+          body {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 80mm !important;
           }
-        `}</style>
+          .no-print {
+            display: none !important;
+          }
+          .thermal-receipt {
+            display: block !important;
+            width: 80mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            font-family: 'Courier New', monospace !important;
+            font-size: 11px !important;
+            line-height: 1.2 !important;
+            background: white !important;
+            color: black !important;
+          }
+          .thermal-receipt * {
+            box-sizing: border-box !important;
+            margin: 0 !important;
+            padding: 0 !important;
+          }
+          .receipt-header,
+          .receipt-section,
+          .receipt-footer {
+            width: 100% !important;
+            text-align: center !important;
+            padding: 4px 0 !important;
+            border-bottom: 1px dashed #000 !important;
+            margin-bottom: 4px !important;
+          }
+          .receipt-header h1 {
+            font-size: 14px !important;
+            font-weight: bold !important;
+            margin: 2px 0 !important;
+          }
+          .receipt-header p {
+            font-size: 10px !important;
+            margin: 1px 0 !important;
+          }
+          .receipt-info {
+            text-align: left !important;
+          }
+          .receipt-info div {
+            font-size: 10px !important;
+            margin: 1px 0 !important;
+            word-wrap: break-word !important;
+          }
+          .items-table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+          }
+          .items-table th,
+          .items-table td {
+            border: none !important;
+            padding: 1px 0 !important;
+            font-size: 10px !important;
+          }
+          .items-table th {
+            border-bottom: 1px solid #000 !important;
+            font-weight: bold !important;
+            text-align: left !important;
+            padding-bottom: 2px !important;
+          }
+          .items-table td {
+            vertical-align: top !important;
+          }
+          .item-name {
+            word-break: break-word !important;
+            width: auto !important;
+          }
+          .item-qty {
+            width: 30px !important;
+            text-align: center !important;
+            padding: 0 2px !important;
+          }
+          .item-total {
+            width: 40px !important;
+            text-align: right !important;
+            padding: 0 0 !important;
+          }
+          .totals-section {
+            font-size: 10px !important;
+            width: 100% !important;
+          }
+          .total-row {
+            display: flex !important;
+            justify-content: space-between !important;
+            margin: 2px 0 !important;
+            width: 100% !important;
+          }
+          .total-amount {
+            text-align: center !important;
+            margin: 4px 0 !important;
+          }
+          .total-amount-value {
+            font-size: 16px !important;
+            font-weight: bold !important;
+            margin: 4px 0 !important;
+          }
+        }
+      `}</style>
 
+      {/* Hidden Receipt for Printing - Thermal Printer Format */}
+      <div className="thermal-receipt">
         {/* Receipt Header */}
-        <div
-          style={{
-            textAlign: 'center',
-            paddingBottom: '8px',
-            borderBottom: '1px dashed #000',
-            marginBottom: '8px',
-          }}
-        >
-          <h1 style={{ fontSize: '16px', fontWeight: 'bold', margin: '5px 0' }}>MY CAFE</h1>
-          <p style={{ fontSize: '11px', margin: '2px 0' }}>Receipt</p>
-          <p style={{ fontSize: '11px', margin: '2px 0' }}>Order #{order.orderNumber}</p>
-          <p style={{ fontSize: '11px', margin: '2px 0' }}>{formatDateTime(order.createdAt)}</p>
+        <div className="receipt-header">
+          <h1>MY CAFE</h1>
+          <p>Receipt</p>
+          <p>Order #{order.orderNumber}</p>
+          <p>{formatDateTime(order.createdAt)}</p>
         </div>
 
         {/* Order Details */}
-        <div
-          style={{
-            paddingBottom: '8px',
-            borderBottom: '1px dashed #000',
-            marginBottom: '8px',
-            textAlign: 'left',
-            fontSize: '11px',
-          }}
-        >
-          <div style={{ marginBottom: '3px' }}>
+        <div className="receipt-section receipt-info">
+          <div>
             <strong>Order Type:</strong> {order.orderType}
           </div>
           {order.tableNumber && (
-            <div style={{ marginBottom: '3px' }}>
+            <div>
               <strong>Table:</strong> {order.tableNumber}
             </div>
           )}
           {order.customerName && (
-            <div style={{ marginBottom: '3px' }}>
+            <div>
               <strong>Customer:</strong> {order.customerName}
             </div>
           )}
         </div>
 
         {/* Items */}
-        <div
-          style={{
-            paddingBottom: '8px',
-            borderBottom: '1px dashed #000',
-            marginBottom: '8px',
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              fontSize: '11px',
-              fontWeight: 'bold',
-              paddingBottom: '5px',
-              borderBottom: '1px solid #000',
-              marginBottom: '5px',
-            }}
-          >
-            <span style={{ flex: 1 }}>Item</span>
-            <span style={{ width: '35px', textAlign: 'center' }}>Qty</span>
-            <span style={{ width: '50px', textAlign: 'right' }}>Total</span>
-          </div>
-          {order.orderLines.map((line) => (
-            <div
-              key={line.id}
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                fontSize: '11px',
-                marginBottom: '3px',
-              }}
-            >
-              <span style={{ flex: 1 }}>{line.menuItem.name}</span>
-              <span style={{ width: '35px', textAlign: 'center' }}>×{line.quantity}</span>
-              <span style={{ width: '50px', textAlign: 'right' }}>
-                {formatCurrency(line.subtotal)}
-              </span>
-            </div>
-          ))}
+        <div className="receipt-section">
+          <table className="items-table">
+            <thead>
+              <tr>
+                <th className="item-name">Item</th>
+                <th className="item-qty">Qty</th>
+                <th className="item-total">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {order.orderLines.map((line) => (
+                <tr key={line.id}>
+                  <td className="item-name">{line.menuItem.name}</td>
+                  <td className="item-qty">×{line.quantity}</td>
+                  <td className="item-total">{formatCurrency(line.subtotal)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         {/* Totals */}
-        <div
-          style={{
-            paddingBottom: '8px',
-            borderBottom: '1px dashed #000',
-            marginBottom: '8px',
-            fontSize: '11px',
-          }}
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
+        <div className="receipt-section totals-section">
+          <div className="total-row">
             <span>Subtotal:</span>
             <span>{formatCurrency(order.subtotal)}</span>
           </div>
           {order.discount > 0 && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
+            <div className="total-row">
               <span>Discount:</span>
               <span>-{formatCurrency(order.discount)}</span>
             </div>
           )}
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div className="total-row">
             <span>Tax (18%):</span>
             <span>{formatCurrency(order.tax)}</span>
           </div>
         </div>
 
         {/* Final Total */}
-        <div
-          style={{
-            textAlign: 'center',
-            paddingBottom: '8px',
-            borderBottom: '1px dashed #000',
-            marginBottom: '8px',
-          }}
-        >
-          <div style={{ fontSize: '11px', marginBottom: '3px' }}>Total Amount</div>
-          <div style={{ fontSize: '18px', fontWeight: 'bold' }}>{formatCurrency(order.total)}</div>
+        <div className="receipt-section">
+          <div className="total-amount">
+            <div>Total Amount</div>
+            <div className="total-amount-value">{formatCurrency(order.total)}</div>
+          </div>
         </div>
 
         {/* Footer */}
-        <div style={{ textAlign: 'center', fontSize: '10px' }}>
-          <p style={{ margin: '3px 0' }}>Thank you for your order!</p>
-          <p style={{ margin: '3px 0' }}>Visit us again soon</p>
-          <p style={{ margin: '3px 0' }}>My Cafe</p>
+        <div className="receipt-footer">
+          <p>Thank you for your order!</p>
+          <p>Visit us again soon</p>
+          <p>My Cafe</p>
         </div>
       </div>
 
