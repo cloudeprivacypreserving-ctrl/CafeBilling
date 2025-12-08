@@ -23,6 +23,8 @@ interface ReceiptData {
 }
 
 import { formatCurrency } from '@/lib/utils'
+// Default QR image (public blob) used when no QR is uploaded in settings
+const DEFAULT_QR_URL = 'https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/qr/qr.jpg'
 
 const PRINTER_WIDTH = 42 // 80mm thermal printer = ~42 characters
 const SEPARATOR = '─'.repeat(PRINTER_WIDTH)
@@ -153,6 +155,17 @@ export function openVirtualPrinterEmulator(data: ReceiptData): void {
   const receiptText = generateThermalReceiptText(data)
 
   // Create a styled HTML representation
+  const qrSrc = data.qrCodePath
+    ? `${typeof window !== 'undefined' ? window.location.origin : ''}${data.qrCodePath}`
+    : DEFAULT_QR_URL
+
+  const qrHtml = `
+    <div style="text-align:center; margin-top:12px;">
+      <img src="${qrSrc}" alt="QR Code" style="width:120px; height:120px; object-fit:contain; border:1px solid #000; padding:6px; background:#fff;" />
+      <div style="font-size:11px; margin-top:6px; color:#333;">Scan to pay</div>
+    </div>
+  `
+
   const html = `
     <!DOCTYPE html>
     <html lang="en">
@@ -310,12 +323,7 @@ export function openVirtualPrinterEmulator(data: ReceiptData): void {
 
         <div class="printer-display" id="receipt">${receiptText}</div>
 
-        ${data.qrCodePath ? `
-          <div style="text-align:center; margin-top:12px;">
-            <img src="${window.location.origin}${data.qrCodePath}" alt="QR Code" style="width:120px; height:120px; object-fit:contain; border:1px solid #000; padding:6px; background:#fff;" />
-            <div style="font-size:11px; margin-top:6px; color:#333;">Scan to pay</div>
-          </div>
-        ` : ''}
+        ${qrHtml}
 
         <div class="printer-info">
           <strong>ℹ️ This is a virtual emulator:</strong> The receipt above shows how it will look on an 80mm thermal printer. 
@@ -332,16 +340,6 @@ export function openVirtualPrinterEmulator(data: ReceiptData): void {
       <script>
         function downloadPDF() {
           // Simple PDF download using browser's print to PDF
-          const element = document.getElementById('receipt');
-          const opt = {
-            margin: 10,
-            filename: 'receipt-${data.orderNumber}.pdf',
-            image: { type: 'png', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
-          };
-          
-          // For simplicity, we'll use the browser's native PDF printing
           window.print();
         }
       </script>

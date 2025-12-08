@@ -90,8 +90,8 @@ export default function OrderDetailPage() {
         subtotal: order.subtotal,
         discount: order.discount,
         tax: order.tax,
-            total: order.total,
-            qrCodePath: qrCodePath || null,
+        total: order.total,
+        qrCodePath: qrCodePath || null,
       }
       openVirtualPrinterEmulator(receiptData)
       toast({
@@ -295,7 +295,13 @@ export default function OrderDetailPage() {
         </div>
         {qrCodePath && (
           <div style={{ textAlign: 'center', padding: '8px 0' }}>
-            <img src={qrCodePath} alt="QR Code" style={{ width: 100, height: 100, objectFit: 'contain', display: 'block', margin: '0 auto' }} />
+            <Image
+              src={qrCodePath}
+              alt="QR Code"
+              width={100}
+              height={100}
+              style={{ objectFit: 'contain', display: 'block', margin: '0 auto' }}
+            />
             <div style={{ fontSize: '9px', marginTop: 6 }}>Scan to pay</div>
           </div>
         )}
@@ -344,9 +350,13 @@ export default function OrderDetailPage() {
                     `*Tax:* ${formatCurrency(order.tax)}\n` +
                     `*Discount:* -${formatCurrency(order.discount)}\n` +
                     `*Total:* ${formatCurrency(order.total)}\n\n`
-                  if (qrCodePath) {
-                    msg += `Scan to pay: ${window.location.origin}${qrCodePath}\n`
-                  }
+                  // Include QR code link: use configured upload if present, otherwise fallback to public blob
+                  const qrFallback =
+                    'https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/qr/qr.jpg'
+                  const qrTarget = qrCodePath
+                    ? `${window.location.origin}${qrCodePath}`
+                    : qrFallback
+                  msg += `Scan to pay: ${qrTarget}\n`
                   msg += `Thank you for choosing My Cafe!`
                   const encodedMsg = encodeURIComponent(msg)
                   window.open(`https://wa.me/91${mobile}?text=${encodedMsg}`, '_blank')

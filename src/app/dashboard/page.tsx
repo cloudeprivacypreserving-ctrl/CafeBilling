@@ -10,30 +10,47 @@ async function getDashboardStats() {
   today.setHours(0, 0, 0, 0)
 
   const completedStatus = ['COMPLETED', 'completed']
-  const [totalOrders, todayRevenue, menuItemsCount, lowStockItems, recentOrders] =
-    await Promise.all([
-      prisma.order.count({ where: { status: { in: completedStatus }, createdAt: { gte: today } } }),
-      prisma.order.aggregate({
-        where: { status: { in: completedStatus }, createdAt: { gte: today } },
-        _sum: { total: true },
-      }),
-      prisma.menuItem.count({ where: { available: true } }),
-      prisma.inventoryItem.count({ where: { quantity: { lte: 10 } } }),
-      prisma.order.findMany({
-        take: 5,
-        orderBy: { createdAt: 'desc' },
-        include: {
-          orderLines: true,
-        },
-      }),
-    ])
+  try {
+    const [totalOrders, todayRevenue, menuItemsCount, lowStockItems, recentOrders] =
+      await Promise.all([
+        prisma.order.count({
+          where: { status: { in: completedStatus }, createdAt: { gte: today } },
+        }),
+        prisma.order.aggregate({
+          where: { status: { in: completedStatus }, createdAt: { gte: today } },
+          _sum: { total: true },
+        }),
+        prisma.menuItem.count({ where: { available: true } }),
+        prisma.inventoryItem.count({ where: { quantity: { lte: 10 } } }),
+        prisma.order.findMany({
+          take: 5,
+          orderBy: { createdAt: 'desc' },
+          include: {
+            orderLines: true,
+          },
+        }),
+      ])
 
-  return {
-    totalOrders,
-    todayRevenue: todayRevenue._sum.total || 0,
-    menuItemsCount,
-    lowStockItems,
-    recentOrders,
+    return {
+      totalOrders,
+      todayRevenue: todayRevenue._sum.total || 0,
+      menuItemsCount,
+      lowStockItems,
+      recentOrders,
+    }
+  } catch (err) {
+    // If the database is not reachable during a build/prerender, return safe defaults
+    // so the Next.js build/prerender can complete in CI/local environments without a DB.
+    // The dashboard will show zeros until runtime DB connection is available.
+    // eslint-disable-next-line no-console
+    console.warn('getDashboardStats: failed to query database during build/prerender', err)
+    return {
+      totalOrders: 0,
+      todayRevenue: 0,
+      menuItemsCount: 0,
+      lowStockItems: 0,
+      recentOrders: [],
+    }
   }
 }
 
