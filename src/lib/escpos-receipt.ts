@@ -4,6 +4,8 @@
  * Compatible with QZ Tray virtual printer emulator
  */
 
+import { formatCurrency } from '@/lib/utils'
+
 interface ReceiptData {
   orderNumber: string
   orderType: string
@@ -215,26 +217,27 @@ export function generateESCPOSReceipt(data: ReceiptData): Uint8Array {
 
   // Items
   for (const item of data.items) {
-    const itemLine =
-      item.name.substring(0, 24).padEnd(24) +
-      item.quantity.toString().padEnd(6) +
-      `₹${item.subtotal.toFixed(2)}`
+    const amountStr = formatCurrency(item.subtotal)
+    const namePart = item.name.substring(0, 24).padEnd(24)
+    const qtyPart = item.quantity.toString().padEnd(6)
+    const totalPart = amountStr.padStart(10)
+    const itemLine = namePart + qtyPart + totalPart
     receipt.text(itemLine).newLine()
   }
 
   // Totals
   receipt
     .dashedLine()
-    .text('Subtotal:'.padEnd(32) + `₹${data.subtotal.toFixed(2)}`)
+    .text('Subtotal:'.padEnd(32) + formatCurrency(data.subtotal).padStart(10))
     .newLine()
 
   if (data.discount > 0) {
-    const discountLine = 'Discount:'.padEnd(32) + `-₹${data.discount.toFixed(2)}`
+    const discountLine = 'Discount:'.padEnd(32) + `-${formatCurrency(data.discount).padStart(9)}`
     receipt.text(discountLine).newLine()
   }
 
   receipt
-    .text('Tax (18%):'.padEnd(32) + `₹${data.tax.toFixed(2)}`)
+    .text('Tax (18%):'.padEnd(32) + formatCurrency(data.tax).padStart(10))
     .newLine()
     .dashedLine()
 
@@ -243,7 +246,7 @@ export function generateESCPOSReceipt(data: ReceiptData): Uint8Array {
     .align(1)
     .bold(true)
     .size(2, 2)
-    .text(`₹${data.total.toFixed(2)}`)
+    .text(formatCurrency(data.total))
     .newLine()
     .size(0, 0)
     .bold(false)

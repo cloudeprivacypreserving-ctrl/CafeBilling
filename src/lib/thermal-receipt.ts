@@ -1,4 +1,5 @@
 import jsPDF from 'jspdf'
+import { formatCurrency } from '@/lib/utils'
 
 interface ReceiptItem {
   name: string
@@ -106,7 +107,7 @@ export const generateThermalReceipt = (data: ReceiptData) => {
     const qtyText = `×${item.quantity}`
     doc.text(qtyText, colPositions.qty, yPos)
 
-    const totalText = `₹${item.subtotal.toFixed(2)}`
+    const totalText = formatCurrency(item.subtotal)
     doc.text(totalText, colPositions.total, yPos, { align: 'right' })
 
     yPos += lineHeight
@@ -121,17 +122,17 @@ export const generateThermalReceipt = (data: ReceiptData) => {
   doc.setFont('courier', 'normal')
 
   doc.text('Subtotal:', 3, yPos)
-  doc.text(`₹${data.subtotal.toFixed(2)}`, pageWidth - 3, yPos, { align: 'right' })
+  doc.text(formatCurrency(data.subtotal), pageWidth - 3, yPos, { align: 'right' })
   yPos += lineHeight
 
   if (data.discount > 0) {
     doc.text('Discount:', 3, yPos)
-    doc.text(`-₹${data.discount.toFixed(2)}`, pageWidth - 3, yPos, { align: 'right' })
+    doc.text(`-${formatCurrency(data.discount)}`, pageWidth - 3, yPos, { align: 'right' })
     yPos += lineHeight
   }
 
   doc.text('Tax (18%):', 3, yPos)
-  doc.text(`₹${data.tax.toFixed(2)}`, pageWidth - 3, yPos, { align: 'right' })
+  doc.text(formatCurrency(data.tax), pageWidth - 3, yPos, { align: 'right' })
   yPos += lineHeight
 
   // Dashed line
@@ -145,7 +146,7 @@ export const generateThermalReceipt = (data: ReceiptData) => {
   yPos += lineHeight
 
   doc.setFontSize(14)
-  doc.text(`₹${data.total.toFixed(2)}`, pageWidth / 2, yPos, { align: 'center' })
+  doc.text(formatCurrency(data.total), pageWidth / 2, yPos, { align: 'center' })
   yPos += lineHeight
 
   // Dashed line
