@@ -147,16 +147,17 @@ export function generateThermalReceiptText(data: ReceiptData): string {
  */
 export function openVirtualPrinterEmulator(data: ReceiptData): void {
   const receiptText = generateThermalReceiptText(data)
+
   // Create a styled HTML representation
   const qrSrc = data.qrCodePath
     ? `${typeof window !== 'undefined' ? window.location.origin : ''}${data.qrCodePath}`
     : DEFAULT_QR_URL
 
   const qrHtml = `
-      <div style="text-align:center; margin-top:12px;">
-        <img src="${qrSrc}" alt="QR Code" style="width:120px; height:120px; object-fit:contain; border:1px solid #000; padding:6px; background:#fff;" />
-        <div style="font-size:11px; margin-top:6px; color:#333;">Scan to pay</div>
-      </div>
+    <div style="text-align:center; margin-top:12px;">
+      <img src="${qrSrc}" alt="QR Code" style="width:120px; height:120px; object-fit:contain; border:1px solid #000; padding:6px; background:#fff;" />
+      <div style="font-size:11px; margin-top:6px; color:#333;">Scan to pay</div>
+    </div>
   `
 
   const html = `
@@ -165,6 +166,14 @@ export function openVirtualPrinterEmulator(data: ReceiptData): void {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Virtual Thermal Printer - Order #${data.orderNumber}</title>
+      <style>
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
         body {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           display: flex;
@@ -309,6 +318,7 @@ export function openVirtualPrinterEmulator(data: ReceiptData): void {
         <div class="printer-display" id="receipt">${receiptText}</div>
 
         ${qrHtml}
+
         <div class="printer-info">
           <strong>ℹ️ This is a virtual emulator:</strong> The receipt above shows how it will look on an 80mm thermal printer. 
           You can print this page or download as PDF. Later, connect a real thermal printer via USB/Bluetooth.
@@ -324,16 +334,6 @@ export function openVirtualPrinterEmulator(data: ReceiptData): void {
       <script>
         function downloadPDF() {
           // Simple PDF download using browser's print to PDF
-          const element = document.getElementById('receipt');
-          const opt = {
-            margin: 10,
-            filename: 'receipt-${data.orderNumber}.pdf',
-            image: { type: 'png', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
-          };
-          
-          // For simplicity, we'll use the browser's native PDF printing
           window.print();
         }
       </script>
