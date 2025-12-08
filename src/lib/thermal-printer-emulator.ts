@@ -30,7 +30,8 @@ const DOUBLE_SEPARATOR = '═'.repeat(PRINTER_WIDTH)
 // Fixed column widths for consistent alignment
 const QTY_WIDTH = 4
 const PRICE_WIDTH = 10
-const NAME_WIDTH = PRINTER_WIDTH - QTY_WIDTH - PRICE_WIDTH - 2 // 2 spaces between columns
+// One space between columns -> NAME_WIDTH = total - qty - price - 2 spaces
+const NAME_WIDTH = PRINTER_WIDTH - QTY_WIDTH - PRICE_WIDTH - 2
 
 /**
  * Format text to center in 42-character width
@@ -67,8 +68,8 @@ function formatItemRow(name: string, qty: number, price: string): string {
   // Price right-aligned in PRICE_WIDTH
   const pricePart = price.padStart(PRICE_WIDTH, ' ')
 
-  // Combine with two spaces between name and qty, one space between qty and price
-  return `${namePart}  ${qtyPart} ${pricePart}`
+  // Combine with one space between name and qty, one space between qty and price
+  return `${namePart} ${qtyPart} ${pricePart}`
 }
 
 /**
@@ -90,9 +91,12 @@ export function generateThermalReceiptText(data: ReceiptData): string {
   if (data.customerName) receipt += `Customer: ${data.customerName}\n`
   receipt += '\n'
 
-  // Items Header
+  // Items Header built with same column widths so it lines up
   receipt += SEPARATOR + '\n'
-  receipt += 'Item                              Qty  Price\n'
+  const headerName = 'Item'.padEnd(NAME_WIDTH, ' ')
+  const headerQty = 'Qty'.padStart(QTY_WIDTH, ' ')
+  const headerPrice = 'Price'.padStart(PRICE_WIDTH, ' ')
+  receipt += `${headerName} ${headerQty} ${headerPrice}\n`
   receipt += SEPARATOR + '\n'
 
   // Items
@@ -103,14 +107,22 @@ export function generateThermalReceiptText(data: ReceiptData): string {
 
   // Totals
   receipt += SEPARATOR + '\n'
-  receipt += `Subtotal${' '.repeat(PRINTER_WIDTH - 'Subtotal'.length - formatCurrency(data.subtotal).length - 1)}${formatCurrency(data.subtotal)}\n`
+
+  // Helper to right-align a value on the PRINTER_WIDTH line
+  const rightLine = (label: string, value: string) => {
+    const left = label
+    const padding = PRINTER_WIDTH - left.length - value.length
+    return left + ' '.repeat(Math.max(0, padding)) + value + '\n'
+  }
+
+  receipt += rightLine('Subtotal', formatCurrency(data.subtotal))
 
   if (data.discount > 0) {
     const discountStr = `-${formatCurrency(data.discount)}`
-    receipt += `Discount${' '.repeat(PRINTER_WIDTH - 'Discount'.length - discountStr.length - 1)}${discountStr}\n`
+    receipt += rightLine('Discount', discountStr)
   }
 
-  receipt += `Tax (18%)${' '.repeat(PRINTER_WIDTH - 'Tax (18%)'.length - formatCurrency(data.tax).length - 1)}${formatCurrency(data.tax)}\n`
+  receipt += rightLine('Tax (18%)', formatCurrency(data.tax))
   receipt += DOUBLE_SEPARATOR + '\n'
 
   // Grand Total
@@ -191,12 +203,13 @@ export function openVirtualPrinterEmulator(data: ReceiptData): void {
           font-family: 'Courier New', monospace;
           font-size: 12px;
           line-height: 1.6;
-          white-space: pre-wrap;
-          word-wrap: break-word;
+          white-space: pre; /* preserve fixed-width spacing exactly */
           color: #000;
           overflow-y: auto;
           max-height: 600px;
           box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+          width: 42ch; /* match PRINTER_WIDTH characters */
+          margin: 0 auto; /* center within container */
         }
 
         .printer-info {
