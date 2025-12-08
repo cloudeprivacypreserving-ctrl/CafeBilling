@@ -350,9 +350,13 @@ export default function OrderDetailPage() {
                     `*Tax:* ${formatCurrency(order.tax)}\n` +
                     `*Discount:* -${formatCurrency(order.discount)}\n` +
                     `*Total:* ${formatCurrency(order.total)}\n\n`
-                  if (qrCodePath) {
-                    msg += `Scan to pay: ${window.location.origin}${qrCodePath}\n`
-                  }
+                  // Include QR code link: use configured upload if present, otherwise fallback to public blob
+                  const qrFallback =
+                    'https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/qr/qr.jpg'
+                  const qrTarget = qrCodePath
+                    ? `${window.location.origin}${qrCodePath}`
+                    : qrFallback
+                  msg += `Scan to pay: ${qrTarget}\n`
                   msg += `Thank you for choosing My Cafe!`
                   const encodedMsg = encodeURIComponent(msg)
                   window.open(`https://wa.me/91${mobile}?text=${encodedMsg}`, '_blank')
