@@ -89,31 +89,45 @@ export default function OrderDetailPage() {
     <div className="space-y-6">
       <style>{`
         @media print {
-          body {
-            margin: 0;
-            padding: 0;
-            background: white;
-          }
           * {
+            margin: 0 !important;
+            padding: 0 !important;
+            border: 0 !important;
             -webkit-print-color-adjust: exact !important;
             color-adjust: exact !important;
             print-color-adjust: exact !important;
           }
-          .no-print {
+          html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background: white !important;
+            width: 100% !important;
+            height: 100% !important;
+          }
+          /* Hide everything by default */
+          body * {
             display: none !important;
           }
+          /* Show only the print receipt */
           .print-only {
             display: block !important;
+          }
+          .print-only * {
+            display: inherit !important;
+            margin: revert !important;
+            padding: revert !important;
+            border: revert !important;
           }
           .print-receipt {
             page-break-after: avoid;
             break-after: avoid;
-            width: 80mm;
-            max-width: 80mm;
-            margin: 0 auto;
-            padding: 0;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
+            width: 80mm !important;
+            max-width: 80mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            font-family: 'Courier New', monospace !important;
+            font-size: 12px !important;
+            display: block !important;
           }
         }
         
