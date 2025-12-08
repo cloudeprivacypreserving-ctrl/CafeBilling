@@ -45,7 +45,9 @@ export class ESCPOSReceipt {
    * Set text alignment (0=left, 1=center, 2=right)
    */
   align(align: number): ESCPOSReceipt {
-    this.commands.push(new TextEncoder().encode(`${ESCPOSReceipt.ESC}a${String.fromCharCode(align)}`))
+    this.commands.push(
+      new TextEncoder().encode(`${ESCPOSReceipt.ESC}a${String.fromCharCode(align)}`)
+    )
     return this
   }
 
@@ -54,7 +56,9 @@ export class ESCPOSReceipt {
    */
   size(width: number, height: number): ESCPOSReceipt {
     const sizeValue = (width << 4) | height
-    this.commands.push(new TextEncoder().encode(`${ESCPOSReceipt.GS}!${String.fromCharCode(sizeValue)}`))
+    this.commands.push(
+      new TextEncoder().encode(`${ESCPOSReceipt.GS}!${String.fromCharCode(sizeValue)}`)
+    )
     return this
   }
 
@@ -63,7 +67,9 @@ export class ESCPOSReceipt {
    */
   bold(enabled: boolean): ESCPOSReceipt {
     const value = enabled ? 1 : 0
-    this.commands.push(new TextEncoder().encode(`${ESCPOSReceipt.ESC}E${String.fromCharCode(value)}`))
+    this.commands.push(
+      new TextEncoder().encode(`${ESCPOSReceipt.ESC}E${String.fromCharCode(value)}`)
+    )
     return this
   }
 
@@ -72,7 +78,9 @@ export class ESCPOSReceipt {
    */
   underline(enabled: boolean): ESCPOSReceipt {
     const value = enabled ? 1 : 0
-    this.commands.push(new TextEncoder().encode(`${ESCPOSReceipt.ESC}-${String.fromCharCode(value)}`))
+    this.commands.push(
+      new TextEncoder().encode(`${ESCPOSReceipt.ESC}-${String.fromCharCode(value)}`)
+    )
     return this
   }
 
@@ -113,7 +121,9 @@ export class ESCPOSReceipt {
    */
   cut(partial: boolean): ESCPOSReceipt {
     const cutType = partial ? 1 : 0
-    this.commands.push(new TextEncoder().encode(`${ESCPOSReceipt.GS}V${String.fromCharCode(cutType)}\x00`))
+    this.commands.push(
+      new TextEncoder().encode(`${ESCPOSReceipt.GS}V${String.fromCharCode(cutType)}\x00`)
+    )
     return this
   }
 
@@ -205,19 +215,28 @@ export function generateESCPOSReceipt(data: ReceiptData): Uint8Array {
 
   // Items
   for (const item of data.items) {
-    const itemLine = item.name.substring(0, 24).padEnd(24) + item.quantity.toString().padEnd(6) + `₹${item.subtotal.toFixed(2)}`
+    const itemLine =
+      item.name.substring(0, 24).padEnd(24) +
+      item.quantity.toString().padEnd(6) +
+      `₹${item.subtotal.toFixed(2)}`
     receipt.text(itemLine).newLine()
   }
 
   // Totals
-  receipt.dashedLine().text('Subtotal:'.padEnd(32) + `₹${data.subtotal.toFixed(2)}`).newLine()
+  receipt
+    .dashedLine()
+    .text('Subtotal:'.padEnd(32) + `₹${data.subtotal.toFixed(2)}`)
+    .newLine()
 
   if (data.discount > 0) {
     const discountLine = 'Discount:'.padEnd(32) + `-₹${data.discount.toFixed(2)}`
     receipt.text(discountLine).newLine()
   }
 
-  receipt.text('Tax (18%):'.padEnd(32) + `₹${data.tax.toFixed(2)}`).newLine().dashedLine()
+  receipt
+    .text('Tax (18%):'.padEnd(32) + `₹${data.tax.toFixed(2)}`)
+    .newLine()
+    .dashedLine()
 
   // Grand total
   receipt
@@ -231,7 +250,13 @@ export function generateESCPOSReceipt(data: ReceiptData): Uint8Array {
     .newLine()
 
   // Footer
-  receipt.align(1).text('Thank you for your order!').newLine().text('Visit us again soon').newLine().newLine()
+  receipt
+    .align(1)
+    .text('Thank you for your order!')
+    .newLine()
+    .text('Visit us again soon')
+    .newLine()
+    .newLine()
 
   // Cut paper
   receipt.cut(false)
@@ -245,9 +270,7 @@ export function generateESCPOSReceipt(data: ReceiptData): Uint8Array {
 export async function sendToThermalPrinter(data: ReceiptData): Promise<void> {
   // Check if QZ Tray is available
   if (typeof (window as any).qz === 'undefined') {
-    throw new Error(
-      'QZ Tray not found. Please install QZ Tray from https://qz.io and try again.'
-    )
+    throw new Error('QZ Tray not found. Please install QZ Tray from https://qz.io and try again.')
   }
 
   const qz = (window as any).qz
