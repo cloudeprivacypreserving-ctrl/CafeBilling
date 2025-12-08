@@ -90,7 +90,8 @@ export default function OrderDetailPage() {
         subtotal: order.subtotal,
         discount: order.discount,
         tax: order.tax,
-        total: order.total,
+            total: order.total,
+            qrCodePath: qrCodePath || null,
       }
       openVirtualPrinterEmulator(receiptData)
       toast({
@@ -292,6 +293,12 @@ export default function OrderDetailPage() {
           <p>Visit us again soon</p>
           <p>My Cafe</p>
         </div>
+        {qrCodePath && (
+          <div style={{ textAlign: 'center', padding: '8px 0' }}>
+            <img src={qrCodePath} alt="QR Code" style={{ width: 100, height: 100, objectFit: 'contain', display: 'block', margin: '0 auto' }} />
+            <div style={{ fontSize: '9px', marginTop: 6 }}>Scan to pay</div>
+          </div>
+        )}
       </div>
 
       {/* Normal screen view */}

@@ -19,6 +19,7 @@ interface ReceiptData {
   discount: number
   tax: number
   total: number
+  qrCodePath?: string | null
 }
 
 import { formatCurrency } from '@/lib/utils'
@@ -135,6 +136,12 @@ export function generateThermalReceiptText(data: ReceiptData): string {
   receipt += centerText('Thank you!') + '\n'
   receipt += centerText('Visit us again') + '\n'
   receipt += '\n'
+
+  // If a QR code path is provided, include a small note with the URL
+  if (data.qrCodePath) {
+    const qrNote = `Scan to pay: ${typeof window !== 'undefined' ? window.location.origin : ''}${data.qrCodePath}`
+    receipt += '\n' + qrNote + '\n'
+  }
 
   return receipt
 }
@@ -302,6 +309,13 @@ export function openVirtualPrinterEmulator(data: ReceiptData): void {
         </div>
 
         <div class="printer-display" id="receipt">${receiptText}</div>
+
+        ${data.qrCodePath ? `
+          <div style="text-align:center; margin-top:12px;">
+            <img src="${window.location.origin}${data.qrCodePath}" alt="QR Code" style="width:120px; height:120px; object-fit:contain; border:1px solid #000; padding:6px; background:#fff;" />
+            <div style="font-size:11px; margin-top:6px; color:#333;">Scan to pay</div>
+          </div>
+        ` : ''}
 
         <div class="printer-info">
           <strong>ℹ️ This is a virtual emulator:</strong> The receipt above shows how it will look on an 80mm thermal printer. 
