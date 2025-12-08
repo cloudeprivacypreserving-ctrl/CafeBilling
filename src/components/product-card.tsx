@@ -30,15 +30,29 @@ interface ProductCardProps {
   }
 }
 
-export function ProductCard({ id, name, description, price, imageUrl, rating, ratingCount, available }: ProductCardProps) {
+export function ProductCard({
+  id,
+  name,
+  description,
+  price,
+  imageUrl,
+  rating,
+  ratingCount,
+  available,
+}: ProductCardProps) {
   const [quantity, setQuantity] = useState(1)
   const [showQuickView, setShowQuickView] = useState(false)
   const [isAdding, setIsAdding] = useState(false)
   const { dispatch } = useCart()
   const { toast } = useToast()
 
+  // Debug logging for image URL
+  if (name.includes('Aloo Tikki Burger')) {
+    console.log(`${name} - imageUrl:`, imageUrl)
+  }
+
   const handleQuantityChange = (delta: number) => {
-    setQuantity(current => Math.max(1, current + delta))
+    setQuantity((current) => Math.max(1, current + delta))
   }
 
   const handleAddToCart = async () => {
@@ -73,18 +87,22 @@ export function ProductCard({ id, name, description, price, imageUrl, rating, ra
 
   return (
     <>
-      <div 
+      <div
         className="group relative overflow-hidden rounded-lg border bg-white transition-all hover:shadow-lg"
         onClick={() => available && setShowQuickView(true)}
       >
         {/* Image */}
-        {imageUrl && (
-          <div className="relative aspect-square overflow-hidden">
+        {imageUrl ? (
+          <div className="relative h-32 w-full overflow-hidden bg-gray-100 rounded-t-lg">
             <Image
               src={imageUrl}
               alt={name}
               fill
               className="object-cover transition-transform group-hover:scale-105"
+              sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
+              onError={(e) => {
+                console.error(`Image failed to load for ${name}:`, imageUrl, e)
+              }}
             />
             {available && (
               <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 opacity-0 transition-all group-hover:bg-opacity-20 group-hover:opacity-100">
@@ -94,19 +112,23 @@ export function ProductCard({ id, name, description, price, imageUrl, rating, ra
               </div>
             )}
           </div>
+        ) : (
+          <div className="relative h-32 w-full overflow-hidden bg-gray-200 rounded-t-lg flex items-center justify-center">
+            <span className="text-gray-500 text-xs text-center p-2">No Image</span>
+          </div>
         )}
-        
+
         {/* Content */}
-        <div className="p-4">
+        <div className="p-2">
           <h3
-            className="font-medium text-gray-900 h-10 overflow-hidden text-ellipsis whitespace-nowrap"
+            className="font-medium text-gray-900 h-8 overflow-hidden text-ellipsis whitespace-nowrap text-sm"
             title={name}
           >
             {name}
           </h3>
           {description && (
             <p
-              className="mt-1 text-sm text-gray-500 h-10 overflow-hidden text-ellipsis"
+              className="mt-1 text-xs text-gray-500 h-6 overflow-hidden text-ellipsis"
               style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}
               title={description}
             >
@@ -114,9 +136,9 @@ export function ProductCard({ id, name, description, price, imageUrl, rating, ra
             </p>
           )}
 
-          <div className="mt-2 flex items-center justify-between">
+          <div className="mt-2 flex items-center justify-between gap-1">
             <div>
-              <p className="font-semibold text-gray-900">{formatCurrency(price)}</p>
+              <p className="font-semibold text-gray-900 text-sm">{formatCurrency(price)}</p>
               {rating && (
                 <div className="mt-1 flex items-center">
                   <div className="flex items-center">
@@ -139,9 +161,9 @@ export function ProductCard({ id, name, description, price, imageUrl, rating, ra
                 </div>
               )}
             </div>
-            
+
             <Button
-              variant={available ? "default" : "secondary"}
+              variant={available ? 'default' : 'secondary'}
               size="sm"
               className="whitespace-nowrap"
               onClick={(e) => {
@@ -165,14 +187,19 @@ export function ProductCard({ id, name, description, price, imageUrl, rating, ra
           </DialogHeader>
 
           <div className="grid gap-4">
-            {imageUrl && (
-              <div className="relative aspect-square overflow-hidden rounded-lg">
+            {imageUrl ? (
+              <div className="relative h-40 w-full overflow-hidden rounded-lg bg-gray-100">
                 <Image
                   src={imageUrl}
                   alt={name}
                   fill
                   className="object-cover"
+                  sizes="(max-width: 640px) 90vw, 400px"
                 />
+              </div>
+            ) : (
+              <div className="h-40 w-full bg-gray-200 rounded-lg flex items-center justify-center">
+                <span className="text-gray-500">No Image Available</span>
               </div>
             )}
 
@@ -199,11 +226,7 @@ export function ProductCard({ id, name, description, price, imageUrl, rating, ra
                       <Plus className="h-4 w-4" />
                     </button>
                   </div>
-                  <Button
-                    className="flex-1"
-                    onClick={handleAddToCart}
-                    disabled={isAdding}
-                  >
+                  <Button className="flex-1" onClick={handleAddToCart} disabled={isAdding}>
                     {isAdding ? 'Adding...' : 'Add to Cart'}
                   </Button>
                 </div>

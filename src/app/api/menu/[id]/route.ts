@@ -3,16 +3,13 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const menuItem = await prisma.menuItem.findUnique({
       where: { id: params.id },
-      include: { 
+      include: {
         category: true,
-        orderLines: true
+        orderLines: true,
       },
     })
 
@@ -32,21 +29,21 @@ export async function GET(
       ...itemWithoutOrders,
       rating,
       ratingCount,
-      orderCount
+      orderCount,
     })
   } catch (error: any) {
     console.error('Error fetching menu item:', error)
-    return NextResponse.json({ 
-      error: 'Failed to fetch menu item',
-      details: error.message 
-    }, { status: 500 })
+    return NextResponse.json(
+      {
+        error: 'Failed to fetch menu item',
+        details: error.message,
+      },
+      { status: 500 }
+    )
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const session = await getServerSession(authOptions)
     if (!session || (session.user.role !== 'ADMIN' && session.user.role !== 'MANAGER')) {
@@ -72,17 +69,17 @@ export async function PUT(
     return NextResponse.json(menuItem)
   } catch (error: any) {
     console.error('Error updating menu item:', error)
-    return NextResponse.json({ 
-      error: 'Failed to update menu item',
-      details: error.message 
-    }, { status: 500 })
+    return NextResponse.json(
+      {
+        error: 'Failed to update menu item',
+        details: error.message,
+      },
+      { status: 500 }
+    )
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const session = await getServerSession(authOptions)
     if (!session || session.user.role !== 'ADMIN') {
@@ -95,10 +92,13 @@ export async function DELETE(
     })
 
     if (orderLinesCount > 0) {
-      return NextResponse.json({ 
-        error: 'Cannot delete menu item',
-        details: `This item has been used in ${orderLinesCount} order(s). Please deactivate it instead.`
-      }, { status: 400 })
+      return NextResponse.json(
+        {
+          error: 'Cannot delete menu item',
+          details: `This item has been used in ${orderLinesCount} order(s). Please deactivate it instead.`,
+        },
+        { status: 400 }
+      )
     }
 
     // Delete associated inventory item first
@@ -114,10 +114,12 @@ export async function DELETE(
     return NextResponse.json({ success: true })
   } catch (error: any) {
     console.error('Error deleting menu item:', error)
-    return NextResponse.json({ 
-      error: 'Failed to delete menu item',
-      details: error.message 
-    }, { status: 500 })
+    return NextResponse.json(
+      {
+        error: 'Failed to delete menu item',
+        details: error.message,
+      },
+      { status: 500 }
+    )
   }
 }
-

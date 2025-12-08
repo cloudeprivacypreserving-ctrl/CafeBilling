@@ -92,10 +92,18 @@ const categories = [
 
 // Add missing icons for Burger and Sandwich if not already imported
 function BurgerIcon(props: any) {
-  return <span role="img" aria-label="burger">🍔</span>;
+  return (
+    <span role="img" aria-label="burger">
+      🍔
+    </span>
+  )
 }
 function SandwichIcon(props: any) {
-  return <span role="img" aria-label="sandwich">🥪</span>;
+  return (
+    <span role="img" aria-label="sandwich">
+      🥪
+    </span>
+  )
 }
 
 interface CategoryNavProps {

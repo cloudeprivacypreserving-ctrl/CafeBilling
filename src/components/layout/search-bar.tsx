@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import Image from 'next/image'
 import { Search, X } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { useDebounce } from '@/hooks/use-debounce'
@@ -89,9 +90,7 @@ export function SearchBar() {
       {showResults && (results.length > 0 || isLoading) && (
         <div className="absolute z-50 mt-2 w-full rounded-lg border bg-white shadow-lg">
           {isLoading ? (
-            <div className="p-4 text-center text-sm text-gray-500">
-              Searching...
-            </div>
+            <div className="p-4 text-center text-sm text-gray-500">Searching...</div>
           ) : (
             <ul className="max-h-[60vh] overflow-auto py-2">
               {results.map((item) => (
@@ -101,9 +100,11 @@ export function SearchBar() {
                     className="flex items-center gap-4 px-4 py-2 hover:bg-gray-50"
                   >
                     {item.imageUrl && (
-                      <img
+                      <Image
                         src={item.imageUrl}
                         alt={item.name}
+                        width={48}
+                        height={48}
                         className="h-12 w-12 rounded-md object-cover"
                       />
                     )}
@@ -111,9 +112,7 @@ export function SearchBar() {
                       <h4 className="font-medium">{item.name}</h4>
                       <p className="text-sm text-gray-500">{item.category.name}</p>
                     </div>
-                    <div className="text-sm font-semibold">
-                      {formatCurrency(item.price)}
-                    </div>
+                    <div className="text-sm font-semibold">{formatCurrency(item.price)}</div>
                   </a>
                 </li>
               ))}

@@ -25,4 +25,3 @@ describe('generateOrderNumber', () => {
     expect(order1).not.toBe(order2)
   })
 })
-

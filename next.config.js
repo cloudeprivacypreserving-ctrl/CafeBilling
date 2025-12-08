@@ -7,9 +7,21 @@ const nextConfig = {
     },
   },
   images: {
-    domains: ['placehold.co'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.vercel-storage.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'backend-files.public.blob.vercel-storage.com',
+      },
+    ],
   },
 }
 
 module.exports = nextConfig
-

@@ -1,0 +1,380 @@
+[
+  {
+    "name": "4 Aloo Tikki Burger + 2 Fries",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/aloo4_fries2.png",
+    "id": "cmivuwamh000lg9ep14fp9wub"
+  },
+  {
+    "name": "Aloo Tikki Burger [Pack of 5]",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/aloo5.png",
+    "id": "cmivuw9qq000jg9epe25fek24"
+  },
+  {
+    "name": "Aloo Tikki Burger with Thick Cold Coffee",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/aloo_coffee.png",
+    "id": "cmivuwcx80011g9epip5usgaf"
+  },
+  {
+    "name": "Aloo Tikki Burger with French Fries",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/aloo_fries.png",
+    "id": "cmivuwcmx000zg9ep2s0rwcgu"
+  },
+  {
+    "name": "Aloo Tikki Burger with French Fries and Cold Coffee",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/aloo_fries_coffee.png",
+    "id": "cmivuwdsb0017g9epa9gd01t0"
+  },
+  {
+    "name": "Gaint Aloo Tikki Burger",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/aloo_giant.png",
+    "id": "cmivuwjul002bg9epbs0ti7f8"
+  },
+  {
+    "name": "Aloo Tikki Burger",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/aloo_single.png",
+    "id": "cmivuwaws000ng9epjj2amoox"
+  },
+  {
+    "name": "Veg Aloo Tower Burger",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/aloo_tower.png",
+    "id": "cmivuwk4w002dg9epoyqdlf25"
+  },
+  {
+    "name": "Blue Heaven Mocktail",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/blue_heaven.png",
+    "id": "cmivuwsr0003vg9ep9la1ukt2"
+  },
+  {
+    "name": "High On Cheese Pizza [8 inches]",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/cheese8.png",
+    "id": "cmivuwlk8002ng9eplbdwdb32"
+  },
+  {
+    "name": "Cheese Chilli Grilled Sandwich",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/cheese_chilli.png",
+    "id": "cmivuwiem0021g9eper44vdb2"
+  },
+  {
+    "name": "Grilled Cheese Sandwich with Cold Coffee",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/cheese_grill_coffee.png",
+    "id": "cmivuwd7k0013g9epuf439bpg"
+  },
+  {
+    "name": "Cheese Masala Pav",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/cheese_pav.png",
+    "id": "cmivuwgai001ng9eps7i48q6i"
+  },
+  {
+    "name": "Potato Cheese Balls [6 Pieces]",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/cheeseballs6.png",
+    "id": "cmivuwfzs001lg9eprjagatnq"
+  },
+  {
+    "name": "Cosy Special Cheesy Pasta",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/cheesy_pasta.png",
+    "id": "cmivuwtww0043g9ep30qtxzk1"
+  },
+  {
+    "name": "Cold Coffee",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/coldcoffee.png",
+    "id": "cmivuwpv0003bg9epuzpew2py"
+  },
+  {
+    "name": "Corn Tikki Burger",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/corn_tikki.png",
+    "id": "cmivuwkph002hg9ep1nwh9r67"
+  },
+  {
+    "name": "Corn Cheese Triangle",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/corn_triangle.png",
+    "id": "cmivuwfpk001jg9ep5h1im3yn"
+  },
+  {
+    "name": "Corn Capsicum Cheese Grilled Sandwich",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/corncap_grill.png",
+    "id": "cmivuwi0o001zg9epicauq4o6"
+  },
+  {
+    "name": "Corn Paneer Pizza [8 inches]",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/cornpaneer8.png",
+    "id": "cmivuwn7g002tg9ep642v2gfz"
+  },
+  {
+    "name": "Corn Veggie Delight [8 inches]",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/cornveg8.png",
+    "id": "cmivuwla0002lg9ep96yna5hn"
+  },
+  {
+    "name": "Cafe Cosy Town Special Cheese Sandwich",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/cosy_cheese.png",
+    "id": "cmivuwizi0025g9epmkcq6sz4"
+  },
+  {
+    "name": "Cafe Cosy Town Special Double Tikki Burger",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/double_tikki.png",
+    "id": "cmivuwkf5002fg9epgvnf4wev"
+  },
+  {
+    "name": "Cafe Cosy Town Special Cheese Blast Fries",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/fries_cheese.png",
+    "id": "cmivuwop10033g9epqrwr0y4k"
+  },
+  {
+    "name": "French Fries with Cold Coffee",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/fries_coffee.png",
+    "id": "cmivuwbro000tg9epn8lbgwck"
+  },
+  {
+    "name": "Cafe Cosy Town Special Masala Fries",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/fries_masala.png",
+    "id": "cmivuwo4f002zg9epodoxcln0"
+  },
+  {
+    "name": "Peri Peri Fries",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/fries_periperi.png",
+    "id": "cmivuwoeo0031g9epgcfg38e1"
+  },
+  {
+    "name": "Salted Fries",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/fries_salt.png",
+    "id": "cmivuwnsg002xg9epdjco8j6l"
+  },
+  {
+    "name": "Cheesy Garlic Bread",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/garlic_cheese.png",
+    "id": "cmivuwffa001hg9ep0lsl83fj"
+  },
+  {
+    "name": "Hot Chocolate",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/hotchoco.png",
+    "id": "cmivuwpkj0039g9ep5h7rr3tm"
+  },
+  {
+    "name": "Hot Coffee",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/hotcoffee.png",
+    "id": "cmivuwp9t0037g9epdhxfnd71"
+  },
+  {
+    "name": "Special Jeera Masala",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/jeera_special.png",
+    "id": "cmivuwsgr003tg9ep3jgc5920"
+  },
+  {
+    "name": "Masala Maggi",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/maggi_masala.png",
+    "id": "cmivuwu770045g9epvv3rkkmw"
+  },
+  {
+    "name": "Paneer Masala Maggi",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/maggi_paneer.png",
+    "id": "cmivuwvc3004bg9epzq45p2gv"
+  },
+  {
+    "name": "Peri Peri Maggi",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/peri_maggi.png",
+    "id": "cmivuwv1t0049g9ephknj4rrg"
+  },
+  {
+    "name": "Veg Maggi",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/maggi_veg.png",
+    "id": "cmivuwuhf0047g9epwwoumdyx"
+  },
+  {
+    "name": "Margherita [8 inches]",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/marg8.png",
+    "id": "cmivuwkzs002jg9ep9x41eaai"
+  },
+  {
+    "name": "Margherita Pizza [8 inches] with Garlic Bread",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/white_garlic.png",
+    "id": "cmivuweup001dg9eph17059t9"
+  },
+  {
+    "name": "Margherita Pizza with Cold Coffee",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/marg_coffee.png",
+    "id": "cmivuwdhs0015g9ep4cjj7yfo"
+  },
+  {
+    "name": "Virgin Mojito",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/mojito.png",
+    "id": "cmivuwt1n003xg9epgyje2d58"
+  },
+  {
+    "name": "Veg Nuggets [6 Pieces]",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/nuggets6.png",
+    "id": "cmivuwf50001fg9epkpbem7hh"
+  },
+  {
+    "name": "Masala Paneer Grilled Sandwich",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/paneer_masala_grill.png",
+    "id": "cmivuwiow0023g9epxtk2lle3"
+  },
+  {
+    "name": "Spicy Paneer Pizza [8 inches]",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/paneer_spicy8.png",
+    "id": "cmivuwlug002pg9ep8salugxu"
+  },
+  {
+    "name": "Tandoori Paneer Pizza [8 inches]",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/paneer_tandoori8.png",
+    "id": "cmivuwm4n002rg9epcz6rjrjh"
+  },
+  {
+    "name": "Paneer Tikki Burger",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/paneer_tikki.png",
+    "id": "cmivuwh5s001tg9epbzsaorog"
+  },
+  {
+    "name": "Bombay Style Pav Bhaji [2 Pav]",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/pavbhaji2.png",
+    "id": "cmivuwgkx001pg9epjn265gzq"
+  },
+  {
+    "name": "Pav Bhaji with Hot Coffee",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/pavbhaji_hotcoffee.png",
+    "id": "cmivuwb74000pg9epelv45y7v"
+  },
+  {
+    "name": "Red Sauce Pasta",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/red_pasta.png",
+    "id": "cmivuwtml0041g9epyfkhx17c"
+  },
+  {
+    "name": "Brownie (Thick Shake)",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/shake_brownie.png",
+    "id": "cmivuwrls003ng9ep87xskx07"
+  },
+  {
+    "name": "Brownie Nutella Thickshake",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/shake_brownie_nutella.png",
+    "id": "cmivuws6h003rg9ep64y1xmjj"
+  },
+  {
+    "name": "Chocolate (Thick Shake)",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/shake_choco.png",
+    "id": "cmivuwqfk003fg9ep3ekb10zb"
+  },
+  {
+    "name": "Kitkat (Thick Shake)",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/shake_kitkat.png",
+    "id": "cmivuwr18003jg9ep7klj38tn"
+  },
+  {
+    "name": "Nutella (Thick Shake)",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/shake_nutella.png",
+    "id": "cmivuwrbj003lg9ep7n2z2fji"
+  },
+  {
+    "name": "Oreo (Thick Shake)",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/shake_oreo.png",
+    "id": "cmivuwqqz003hg9epid5hy3rt"
+  },
+  {
+    "name": "Strawberry (Milk Shake)",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/shake_strawberry.png",
+    "id": "cmivuwrw4003pg9epxzxafi05"
+  },
+  {
+    "name": "Tandoori Paneer Burger",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/tandoori_burger.png",
+    "id": "cmivuwgvi001rg9ep4wglkpwn"
+  },
+  {
+    "name": "Tea",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/tea.png",
+    "id": "cmivuwozj0035g9epsj56zkhq"
+  },
+  {
+    "name": "Thick Coffee",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/thickcoffee.png",
+    "id": "cmivuwq5c003dg9epzlrpvahi"
+  },
+  {
+    "name": "Towns Special Pizza [8 inches]",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/town_special8.png",
+    "id": "cmivuwnht002vg9eppxl9attt"
+  },
+  {
+    "name": "Veg Grilled Sandwich",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/veg_grill.png",
+    "id": "cmivuwhg0001vg9epzkzb9ltr"
+  },
+  {
+    "name": "Veg Tikki Burger",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/veg_tikki.png",
+    "id": "cmivuwjk90029g9ep5mku3ek8"
+  },
+  {
+    "name": "Veg Cheese Grilled Sandwich",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/vegcheese_grill.png",
+    "id": "cmivuwhq8001xg9eph4t1kr44"
+  },
+  {
+    "name": "White Sauce Pasta",
+    "status": "updated",
+    "imageUrl": "https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/menus/white_pasta.png",
+    "id": "cmivuwtc0003zg9epxb5l356h"
+  }
+]

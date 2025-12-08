@@ -47,19 +47,16 @@ const DialogContentComponent = React.forwardRef<
 ))
 DialogContentComponent.displayName = 'DialogContent'
 
-const DialogHeaderComponent = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
+const DialogHeaderComponent = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div className={cn('flex flex-col space-y-1.5 text-center sm:text-left', className)} {...props} />
 )
 DialogHeaderComponent.displayName = 'DialogHeader'
 
-const DialogFooterComponent = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2', className)} {...props} />
+const DialogFooterComponent = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2', className)}
+    {...props}
+  />
 )
 DialogFooterComponent.displayName = 'DialogFooter'
 
@@ -94,4 +91,3 @@ export const DialogContent = DialogContentComponent
 export const DialogHeader = DialogHeaderComponent
 export const DialogFooter = DialogFooterComponent
 export { DialogTitle, DialogDescription }
-

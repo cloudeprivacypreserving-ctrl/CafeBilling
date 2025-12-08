@@ -76,7 +76,6 @@ After running the seed script, you can login with:
 
 - **Admin**: `admin@mycafe.com` / `admin123`
   - Full access to all features
-  
 - **Cashier**: `cashier@mycafe.com` / `cashier123`
   - Can create orders and view basic info
 
@@ -256,4 +255,3 @@ my-cafe/
 ---
 
 Happy coding! ☕
-

@@ -21,8 +21,8 @@ export function Header() {
 
         {/* Actions */}
         <div className="flex items-center space-x-4">
-          <Link 
-            href="/dashboard" 
+          <Link
+            href="/dashboard"
             className="flex items-center space-x-1 text-sm hover:text-primary"
           >
             <User className="h-5 w-5" />

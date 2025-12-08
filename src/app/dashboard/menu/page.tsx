@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { formatCurrency } from '@/lib/utils'
 import { Plus, Edit, Trash2, X } from 'lucide-react'
+import Image from 'next/image'
 import { useToast } from '@/hooks/use-toast'
 import {
   Dialog,
@@ -37,6 +38,7 @@ export default function MenuPage() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
+  const [searchQuery, setSearchQuery] = useState('')
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null)
   const [formData, setFormData] = useState({
@@ -50,6 +52,14 @@ export default function MenuPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [uploadingImage, setUploadingImage] = useState(false)
   const { toast } = useToast()
+
+  // Filter menu items based on search query
+  const filteredMenuItems = menuItems.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.category.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
 
   useEffect(() => {
     fetchMenuItems()
@@ -117,19 +127,19 @@ export default function MenuPage() {
 
   const handleImageUpload = async () => {
     if (!selectedFile) return null
-    
+
     setUploadingImage(true)
     try {
       const formDataToSend = new FormData()
       formDataToSend.append('file', selectedFile)
-      
+
       const res = await fetch('/api/upload', {
         method: 'POST',
         body: formDataToSend,
       })
-      
+
       if (!res.ok) throw new Error('Upload failed')
-      
+
       const data = await res.json()
       setUploadingImage(false)
       return data.url
@@ -146,25 +156,27 @@ export default function MenuPage() {
     try {
       const res = await fetch(`/api/menu/${id}`, { method: 'DELETE' })
       const data = await res.json()
-      
+
       if (!res.ok) {
         throw new Error(data.details || data.error || 'Failed to delete item')
       }
-      
+
       toast({ title: 'Success', description: 'Menu item deleted successfully' })
       fetchMenuItems()
     } catch (error: any) {
-      toast({ 
-        title: 'Cannot Delete Item', 
-        description: error.message || 'Failed to delete menu item. This item may be referenced in past orders.', 
-        variant: 'destructive' 
+      toast({
+        title: 'Cannot Delete Item',
+        description:
+          error.message ||
+          'Failed to delete menu item. This item may be referenced in past orders.',
+        variant: 'destructive',
       })
     }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     try {
       // Upload image if file is selected
       let imageUrl = formData.imageUrl
@@ -206,10 +218,10 @@ export default function MenuPage() {
       fetchMenuItems()
     } catch (error: any) {
       console.error('Submit error:', error)
-      toast({ 
-        title: 'Error', 
-        description: error.message || 'Operation failed', 
-        variant: 'destructive' 
+      toast({
+        title: 'Error',
+        description: error.message || 'Operation failed',
+        variant: 'destructive',
       })
     }
   }
@@ -238,58 +250,113 @@ export default function MenuPage() {
         </Button>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {menuItems.map((item) => (
-          <Card key={item.id}>
-            {item.imageUrl && (
-              <div className="card-image rounded-t-lg">
-                <img
+      {/* Search Bar */}
+      <div className="flex items-center gap-4">
+        <div className="flex-1 max-w-md">
+          <Input
+            placeholder="Search menu items..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full"
+          />
+        </div>
+        {searchQuery && (
+          <Button variant="outline" onClick={() => setSearchQuery('')} className="flex-shrink-0">
+            Clear
+          </Button>
+        )}
+      </div>
+
+      {/* Results count */}
+      <div className="text-sm text-gray-600">
+        {searchQuery
+          ? `Found ${filteredMenuItems.length} item${
+              filteredMenuItems.length !== 1 ? 's' : ''
+            } matching "${searchQuery}"`
+          : `Total ${menuItems.length} menu item${menuItems.length !== 1 ? 's' : ''}`}
+      </div>
+
+      <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        {filteredMenuItems.map((item) => (
+          <Card key={item.id} className="overflow-hidden border rounded-lg max-w-sm">
+            <div className="aspect-[4/3] w-full overflow-hidden bg-gray-100 relative">
+              {item.imageUrl ? (
+                <Image
                   src={item.imageUrl}
                   alt={item.name}
-                  className="h-full w-full"
+                  fill
+                  className="object-cover object-center"
+                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, (max-width: 1280px) 20vw, 200px"
                 />
-              </div>
-            )}
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <CardTitle>{item.name}</CardTitle>
-                <div className="flex space-x-2">
-                  <Button size="sm" variant="ghost" onClick={() => handleEdit(item)}>
-                    <Edit className="h-4 w-4" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="text-gray-500 text-xs">No Image</span>
+                </div>
+              )}
+            </div>
+            <CardHeader className="p-3">
+              <div className="flex items-start justify-between gap-2">
+                <CardTitle className="text-sm font-medium line-clamp-2 flex-1">
+                  {item.name}
+                </CardTitle>
+                <div className="flex space-x-1 flex-shrink-0">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-7 w-7 p-0"
+                    onClick={() => handleEdit(item)}
+                  >
+                    <Edit className="h-3 w-3" />
                   </Button>
-                  <Button size="sm" variant="ghost" onClick={() => handleDelete(item.id)}>
-                    <Trash2 className="h-4 w-4" />
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-7 w-7 p-0"
+                    onClick={() => handleDelete(item.id)}
+                  >
+                    <Trash2 className="h-3 w-3" />
                   </Button>
                 </div>
               </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-3 pt-0">
               <div className="space-y-2">
-                <p className="text-sm text-gray-600">{item.description}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-lg font-bold">{formatCurrency(item.price)}</span>
+                <p className="text-xs text-gray-600 line-clamp-2">{item.description}</p>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-bold">{formatCurrency(item.price)}</span>
                   <span
-                    className={`rounded-full px-2 py-1 text-xs ${
-                      item.available
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
+                    className={`rounded-full px-2 py-1 text-xs flex-shrink-0 ${
+                      item.available ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                     }`}
                   >
                     {item.available ? 'Available' : 'Unavailable'}
                   </span>
                 </div>
-                <p className="text-xs text-gray-500">{item.category.name}</p>
+                <p className="text-xs text-gray-500 truncate">{item.category.name}</p>
               </div>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      {menuItems.length === 0 && (
+      {menuItems.length === 0 && !loading && (
         <Card>
           <CardContent className="pt-6">
             <div className="text-center text-gray-500">
               <p>No menu items found. Add your first item to get started.</p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {menuItems.length > 0 && filteredMenuItems.length === 0 && searchQuery && (
+        <Card>
+          <CardContent className="pt-6">
+            <div className="text-center text-gray-500">
+              <p>No menu items match your search for &quot;{searchQuery}&quot;.</p>
+              <Button variant="outline" onClick={() => setSearchQuery('')} className="mt-2">
+                Clear search
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -358,9 +425,7 @@ export default function MenuPage() {
                   onChange={handleFileChange}
                   className="cursor-pointer"
                 />
-                {selectedFile && (
-                  <p className="mt-1 text-sm text-gray-500">{selectedFile.name}</p>
-                )}
+                {selectedFile && <p className="mt-1 text-sm text-gray-500">{selectedFile.name}</p>}
               </div>
               <div>
                 <Label htmlFor="imageUrl">OR Image URL</Label>

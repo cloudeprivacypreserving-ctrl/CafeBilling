@@ -44,11 +44,7 @@ export default function NewOrderPage() {
   const addToCart = (item: MenuItem) => {
     const existingItem = cart.find((i) => i.menuItemId === item.id)
     if (existingItem) {
-      setCart(
-        cart.map((i) =>
-          i.menuItemId === item.id ? { ...i, quantity: i.quantity + 1 } : i
-        )
-      )
+      setCart(cart.map((i) => (i.menuItemId === item.id ? { ...i, quantity: i.quantity + 1 } : i)))
     } else {
       setCart([
         ...cart,
@@ -65,11 +61,7 @@ export default function NewOrderPage() {
     if (quantity <= 0) {
       removeFromCart(menuItemId)
     } else {
-      setCart(
-        cart.map((item) =>
-          item.menuItemId === menuItemId ? { ...item, quantity } : item
-        )
-      )
+      setCart(cart.map((item) => (item.menuItemId === menuItemId ? { ...item, quantity } : item)))
     }
   }
 
@@ -223,7 +215,10 @@ export default function NewOrderPage() {
             <h2 className="mb-4 text-lg font-semibold">Cart ({cart.length})</h2>
             <div className="space-y-2">
               {cart.map((item) => (
-                <div key={item.menuItemId} className="flex items-center justify-between rounded border p-2">
+                <div
+                  key={item.menuItemId}
+                  className="flex items-center justify-between rounded border p-2"
+                >
                   <div className="flex-1">
                     <div className="font-medium text-sm">{item.name}</div>
                     <div className="text-xs text-gray-500">
@@ -290,4 +285,3 @@ export default function NewOrderPage() {
     </div>
   )
 }
-

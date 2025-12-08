@@ -5,10 +5,7 @@ import { prisma } from '@/lib/prisma'
 import PDFDocument from 'pdfkit'
 import { formatCurrency } from '@/lib/utils'
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { orderId: string } }
-) {
+export async function GET(request: NextRequest, { params }: { params: { orderId: string } }) {
   try {
     const session = await getServerSession(authOptions)
     if (!session) {
@@ -62,9 +59,9 @@ export async function GET(
 
     // Items
     order.orderLines.forEach((line) => {
-      doc.fontSize(9).text(
-        `${line.quantity}x ${line.menuItem.name} - ${formatCurrency(line.subtotal)}`
-      )
+      doc
+        .fontSize(9)
+        .text(`${line.quantity}x ${line.menuItem.name} - ${formatCurrency(line.subtotal)}`)
       if (line.specialInstructions) {
         doc.fontSize(8).text(`  Note: ${line.specialInstructions}`)
       }
