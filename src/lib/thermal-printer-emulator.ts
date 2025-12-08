@@ -27,6 +27,11 @@ const PRINTER_WIDTH = 42 // 80mm thermal printer = ~42 characters
 const SEPARATOR = '─'.repeat(PRINTER_WIDTH)
 const DOUBLE_SEPARATOR = '═'.repeat(PRINTER_WIDTH)
 
+// Fixed column widths for consistent alignment
+const QTY_WIDTH = 4
+const PRICE_WIDTH = 10
+const NAME_WIDTH = PRINTER_WIDTH - QTY_WIDTH - PRICE_WIDTH - 2 // 2 spaces between columns
+
 /**
  * Format text to center in 42-character width
  */
@@ -49,12 +54,21 @@ function rightAlign(text: string): string {
  */
 function formatItemRow(name: string, qty: number, price: string): string {
   const qtyStr = `${qty}x`
-  const availableWidth = PRINTER_WIDTH - qtyStr.length - price.length - 2
-  const isTruncated = name.length > availableWidth
-  const truncatedName = isTruncated
-    ? name.substring(0, availableWidth - 2) + '..'
-    : name.padEnd(availableWidth, ' ')
-  return `${truncatedName} ${qtyStr.padEnd(4, ' ')}${price.padStart(price.length, ' ')}`
+
+  // Truncate or pad name to fixed NAME_WIDTH
+  const isTruncated = name.length > NAME_WIDTH
+  const namePart = isTruncated
+    ? name.substring(0, NAME_WIDTH - 2) + '..'
+    : name.padEnd(NAME_WIDTH, ' ')
+
+  // Qty right-aligned in QTY_WIDTH
+  const qtyPart = qtyStr.padStart(QTY_WIDTH, ' ')
+
+  // Price right-aligned in PRICE_WIDTH
+  const pricePart = price.padStart(PRICE_WIDTH, ' ')
+
+  // Combine with two spaces between name and qty, one space between qty and price
+  return `${namePart}  ${qtyPart} ${pricePart}`
 }
 
 /**
