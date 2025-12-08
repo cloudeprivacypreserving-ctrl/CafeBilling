@@ -339,7 +339,7 @@ export default function OrderDetailPage() {
                       (line) =>
                         `• ${line.menuItem.name} x${line.quantity} - ${formatCurrency(line.subtotal)}`
                     )
-                    .join('%0A')
+                    .join('\n')
                   let msg =
                     `🍽️ *Thank you for ordering with My Cafe!*\n\n` +
                     `*Order No:* ${order.orderNumber}\n` +
