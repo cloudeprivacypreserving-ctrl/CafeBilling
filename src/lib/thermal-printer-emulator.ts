@@ -19,9 +19,12 @@ interface ReceiptData {
   discount: number
   tax: number
   total: number
+  qrCodePath?: string | null
 }
 
 import { formatCurrency } from '@/lib/utils'
+// Default QR image (public blob) used when no QR is uploaded in settings
+const DEFAULT_QR_URL = 'https://i2bdndgexv7dx4eo.public.blob.vercel-storage.com/qr/qr.jpg'
 
 const PRINTER_WIDTH = 42 // 80mm thermal printer = ~42 characters
 const SEPARATOR = '─'.repeat(PRINTER_WIDTH)
@@ -144,16 +147,17 @@ export function generateThermalReceiptText(data: ReceiptData): string {
  */
 export function openVirtualPrinterEmulator(data: ReceiptData): void {
   const receiptText = generateThermalReceiptText(data)
-
   // Create a styled HTML representation
-  const qrHtml = data.qrCodePath
-    ? `
+  const qrSrc = data.qrCodePath
+    ? `${typeof window !== 'undefined' ? window.location.origin : ''}${data.qrCodePath}`
+    : DEFAULT_QR_URL
+
+  const qrHtml = `
       <div style="text-align:center; margin-top:12px;">
-        <img src="${window.location.origin}${data.qrCodePath}" alt="QR Code" style="width:120px; height:120px; object-fit:contain; border:1px solid #000; padding:6px; background:#fff;" />
+        <img src="${qrSrc}" alt="QR Code" style="width:120px; height:120px; object-fit:contain; border:1px solid #000; padding:6px; background:#fff;" />
         <div style="font-size:11px; margin-top:6px; color:#333;">Scan to pay</div>
       </div>
-    `
-    : ''
+  `
 
   const html = `
     <!DOCTYPE html>
@@ -161,14 +165,6 @@ export function openVirtualPrinterEmulator(data: ReceiptData): void {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Virtual Thermal Printer - Order #${data.orderNumber}</title>
-      <style>
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
-
         body {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           display: flex;
