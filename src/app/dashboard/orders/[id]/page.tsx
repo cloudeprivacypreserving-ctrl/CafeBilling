@@ -8,8 +8,8 @@ import { formatCurrency, formatDateTime } from '@/lib/utils'
 import { Download, Printer } from 'lucide-react'
 import Image from 'next/image'
 import { useToast } from '@/hooks/use-toast'
-import { sendToThermalPrinter, previewReceipt } from '@/lib/escpos-receipt'
 import { printThermalReceipt, downloadThermalReceipt } from '@/lib/thermal-receipt'
+import { openVirtualPrinterEmulator, previewESCPOSCommands } from '@/lib/thermal-printer-emulator'
 
 interface OrderLine {
   id: string
@@ -134,7 +134,7 @@ export default function OrderDetailPage() {
     }
   }
 
-  const handlePrintToThermal = async () => {
+  const handlePrintToThermal = () => {
     if (!order) return
     try {
       const receiptData = {
@@ -153,15 +153,15 @@ export default function OrderDetailPage() {
         tax: order.tax,
         total: order.total,
       }
-      await sendToThermalPrinter(receiptData)
+      openVirtualPrinterEmulator(receiptData)
       toast({
         title: 'Success',
-        description: 'Receipt sent to thermal printer',
+        description: 'Virtual printer emulator opened',
       })
     } catch (err) {
       toast({
         title: 'Error',
-        description: (err as Error).message || 'Failed to send to thermal printer',
+        description: 'Failed to open virtual printer',
         variant: 'destructive',
       })
     }

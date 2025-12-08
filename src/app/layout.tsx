@@ -17,8 +17,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={inter.className}>
         {children}
         <Toaster />
-        {/* Load QZ Tray for thermal printer support */}
-        <Script src="https://qz.io/api/modern/qz-tray.js" />
       </body>
     </html>
   )
