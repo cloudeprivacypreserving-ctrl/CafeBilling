@@ -8,7 +8,6 @@ import { formatCurrency, formatDateTime } from '@/lib/utils'
 import { Download, Printer } from 'lucide-react'
 import Image from 'next/image'
 import { useToast } from '@/hooks/use-toast'
-import { printThermalReceipt, downloadThermalReceipt } from '@/lib/thermal-receipt'
 import { openVirtualPrinterEmulator, previewESCPOSCommands } from '@/lib/thermal-printer-emulator'
 
 interface OrderLine {
@@ -72,67 +71,7 @@ export default function OrderDetailPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId])
 
-  const handlePrint = () => {
-    if (!order) return
-    try {
-      const receiptData = {
-        orderNumber: order.orderNumber,
-        orderType: order.orderType,
-        createdAt: formatDateTime(order.createdAt),
-        tableNumber: order.tableNumber,
-        customerName: order.customerName,
-        items: order.orderLines.map((line) => ({
-          name: line.menuItem.name,
-          quantity: line.quantity,
-          subtotal: line.subtotal,
-        })),
-        subtotal: order.subtotal,
-        discount: order.discount,
-        tax: order.tax,
-        total: order.total,
-      }
-      printThermalReceipt(receiptData)
-    } catch (err) {
-      toast({
-        title: 'Error',
-        description: 'Failed to generate receipt',
-        variant: 'destructive',
-      })
-    }
-  }
-
-  const handleDownload = () => {
-    if (!order) return
-    try {
-      const receiptData = {
-        orderNumber: order.orderNumber,
-        orderType: order.orderType,
-        createdAt: formatDateTime(order.createdAt),
-        tableNumber: order.tableNumber,
-        customerName: order.customerName,
-        items: order.orderLines.map((line) => ({
-          name: line.menuItem.name,
-          quantity: line.quantity,
-          subtotal: line.subtotal,
-        })),
-        subtotal: order.subtotal,
-        discount: order.discount,
-        tax: order.tax,
-        total: order.total,
-      }
-      downloadThermalReceipt(receiptData, `receipt-${order.orderNumber}.pdf`)
-      toast({
-        title: 'Success',
-        description: 'Receipt downloaded successfully',
-      })
-    } catch (err) {
-      toast({
-        title: 'Error',
-        description: 'Failed to download receipt',
-        variant: 'destructive',
-      })
-    }
-  }
+  // Old PDF print/download handlers removed — use virtual thermal emulator
 
   const handlePrintToThermal = () => {
     if (!order) return
@@ -366,15 +305,7 @@ export default function OrderDetailPage() {
             <div className="flex space-x-2">
               <Button onClick={handlePrintToThermal} className="bg-blue-600 hover:bg-blue-700">
                 <Printer className="mr-2 h-4 w-4" />
-                Print to Thermal
-              </Button>
-              <Button onClick={handlePrint}>
-                <Printer className="mr-2 h-4 w-4" />
                 Print Receipt
-              </Button>
-              <Button variant="outline" onClick={handleDownload}>
-                <Download className="mr-2 h-4 w-4" />
-                Download PDF
               </Button>
             </div>
             <div className="flex gap-2 mt-2">
