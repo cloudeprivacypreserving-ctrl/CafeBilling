@@ -146,6 +146,15 @@ export function openVirtualPrinterEmulator(data: ReceiptData): void {
   const receiptText = generateThermalReceiptText(data)
 
   // Create a styled HTML representation
+  const qrHtml = data.qrCodePath
+    ? `
+      <div style="text-align:center; margin-top:12px;">
+        <img src="${window.location.origin}${data.qrCodePath}" alt="QR Code" style="width:120px; height:120px; object-fit:contain; border:1px solid #000; padding:6px; background:#fff;" />
+        <div style="font-size:11px; margin-top:6px; color:#333;">Scan to pay</div>
+      </div>
+    `
+    : ''
+
   const html = `
     <!DOCTYPE html>
     <html lang="en">
@@ -303,6 +312,7 @@ export function openVirtualPrinterEmulator(data: ReceiptData): void {
 
         <div class="printer-display" id="receipt">${receiptText}</div>
 
+        ${qrHtml}
         <div class="printer-info">
           <strong>ℹ️ This is a virtual emulator:</strong> The receipt above shows how it will look on an 80mm thermal printer. 
           You can print this page or download as PDF. Later, connect a real thermal printer via USB/Bluetooth.
