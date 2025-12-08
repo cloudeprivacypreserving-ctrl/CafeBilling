@@ -8,6 +8,7 @@ import { formatCurrency, formatDateTime } from '@/lib/utils'
 import { Download, Printer } from 'lucide-react'
 import Image from 'next/image'
 import { useToast } from '@/hooks/use-toast'
+import { printThermalReceipt, downloadThermalReceipt } from '@/lib/thermal-receipt'
 
 interface OrderLine {
   id: string
@@ -72,12 +73,64 @@ export default function OrderDetailPage() {
 
   const handlePrint = () => {
     if (!order) return
-    // Print the hidden receipt div
-    window.print()
+    try {
+      const receiptData = {
+        orderNumber: order.orderNumber,
+        orderType: order.orderType,
+        createdAt: formatDateTime(order.createdAt),
+        tableNumber: order.tableNumber,
+        customerName: order.customerName,
+        items: order.orderLines.map((line) => ({
+          name: line.menuItem.name,
+          quantity: line.quantity,
+          subtotal: line.subtotal,
+        })),
+        subtotal: order.subtotal,
+        discount: order.discount,
+        tax: order.tax,
+        total: order.total,
+      }
+      printThermalReceipt(receiptData)
+    } catch (err) {
+      toast({
+        title: 'Error',
+        description: 'Failed to generate receipt',
+        variant: 'destructive',
+      })
+    }
   }
 
   const handleDownload = () => {
-    toast({ title: 'Download', description: 'PDF download coming soon!' })
+    if (!order) return
+    try {
+      const receiptData = {
+        orderNumber: order.orderNumber,
+        orderType: order.orderType,
+        createdAt: formatDateTime(order.createdAt),
+        tableNumber: order.tableNumber,
+        customerName: order.customerName,
+        items: order.orderLines.map((line) => ({
+          name: line.menuItem.name,
+          quantity: line.quantity,
+          subtotal: line.subtotal,
+        })),
+        subtotal: order.subtotal,
+        discount: order.discount,
+        tax: order.tax,
+        total: order.total,
+      }
+      downloadThermalReceipt(receiptData, `receipt-${order.orderNumber}.pdf`)
+      toast({
+        title: 'Success',
+        description: 'Receipt downloaded successfully',
+      })
+    } catch (err) {
+      toast({
+        title: 'Error',
+        description: 'Failed to download receipt',
+        variant: 'destructive',
+      })
+    }
   }
 
   if (loading) {
