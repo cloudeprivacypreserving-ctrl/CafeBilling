@@ -1,28 +1,39 @@
 import { prisma } from '@/lib/prisma'
-import { formatCurrency } from '@/lib/utils'
+import { formatCurrency, formatDate } from '@/lib/utils'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { TrendingUp, DollarSign, ShoppingCart, Package } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { TrendingUp, DollarSign, ShoppingCart, Package, Plus, Clock } from 'lucide-react'
+import Link from 'next/link'
 
 async function getDashboardStats() {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
   const completedStatus = ['COMPLETED', 'completed']
-  const [totalOrders, todayRevenue, menuItemsCount, lowStockItems] = await Promise.all([
-    prisma.order.count({ where: { status: { in: completedStatus }, createdAt: { gte: today } } }),
-    prisma.order.aggregate({
-      where: { status: { in: completedStatus }, createdAt: { gte: today } },
-      _sum: { total: true },
-    }),
-    prisma.menuItem.count({ where: { available: true } }),
-    prisma.inventoryItem.count({ where: { quantity: { lte: 10 } } }),
-  ])
+  const [totalOrders, todayRevenue, menuItemsCount, lowStockItems, recentOrders] =
+    await Promise.all([
+      prisma.order.count({ where: { status: { in: completedStatus }, createdAt: { gte: today } } }),
+      prisma.order.aggregate({
+        where: { status: { in: completedStatus }, createdAt: { gte: today } },
+        _sum: { total: true },
+      }),
+      prisma.menuItem.count({ where: { available: true } }),
+      prisma.inventoryItem.count({ where: { quantity: { lte: 10 } } }),
+      prisma.order.findMany({
+        take: 5,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          orderLines: true,
+        },
+      }),
+    ])
 
   return {
     totalOrders,
     todayRevenue: todayRevenue._sum.total || 0,
     menuItemsCount,
     lowStockItems,
+    recentOrders,
   }
 }
 
@@ -84,13 +95,43 @@ export default async function DashboardPage() {
 
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
-          <CardHeader>
-            <CardTitle>Recent Orders</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <Clock className="h-4 w-4" />
+              Recent Orders
+            </CardTitle>
+            <Link href="/dashboard/orders">
+              <Button variant="outline" size="sm">
+                View All
+              </Button>
+            </Link>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground">
-              Check your recent orders in the Orders section
-            </p>
+            {stats.recentOrders.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No orders yet</p>
+            ) : (
+              <div className="space-y-4">
+                {stats.recentOrders.map((order) => (
+                  <div
+                    key={order.id}
+                    className="flex items-center justify-between border-b pb-3 last:border-0"
+                  >
+                    <div>
+                      <p className="font-medium text-sm">Order #{order.orderNumber}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {formatDate(new Date(order.createdAt))}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-semibold">{formatCurrency(order.total)}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {order.orderLines.length} items
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -99,9 +140,32 @@ export default async function DashboardPage() {
             <CardTitle>Quick Actions</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground">
-              Start a new order, manage inventory, or view reports
-            </p>
+            <div className="grid gap-3">
+              <Link href="/dashboard/orders/new">
+                <Button className="w-full justify-start" variant="outline">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create New Order
+                </Button>
+              </Link>
+              <Link href="/dashboard/menu">
+                <Button className="w-full justify-start" variant="outline">
+                  <Package className="mr-2 h-4 w-4" />
+                  Manage Menu
+                </Button>
+              </Link>
+              <Link href="/dashboard/inventory">
+                <Button className="w-full justify-start" variant="outline">
+                  <ShoppingCart className="mr-2 h-4 w-4" />
+                  Manage Inventory
+                </Button>
+              </Link>
+              <Link href="/dashboard/orders">
+                <Button className="w-full justify-start" variant="outline">
+                  <Clock className="mr-2 h-4 w-4" />
+                  View All Orders
+                </Button>
+              </Link>
+            </div>
           </CardContent>
         </Card>
       </div>
