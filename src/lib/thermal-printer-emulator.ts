@@ -139,6 +139,12 @@ export function generateThermalReceiptText(data: ReceiptData): string {
   receipt += centerText('Visit us again') + '\n'
   receipt += '\n'
 
+  // If a QR code path is provided, include a small note with the URL
+  if (data.qrCodePath) {
+    const qrNote = `Scan to pay: ${typeof window !== 'undefined' ? window.location.origin : ''}${data.qrCodePath}`
+    receipt += '\n' + qrNote + '\n'
+  }
+
   return receipt
 }
 
