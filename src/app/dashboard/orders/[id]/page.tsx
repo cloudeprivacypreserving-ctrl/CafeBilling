@@ -88,190 +88,179 @@ export default function OrderDetailPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <>
       <style>{`
+        @page {
+          size: 80mm auto;
+          margin: 0;
+          padding: 0;
+        }
+        
         @media print {
-          body {
-            margin: 0 !important;
-            padding: 0 !important;
-            width: 80mm !important;
+          html, body {
+            width: 80mm;
+            height: auto;
+            margin: 0;
+            padding: 0;
           }
+          
           .no-print {
             display: none !important;
           }
-          .thermal-receipt {
+          
+          .receipt-container {
             display: block !important;
-            width: 80mm !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            font-family: 'Courier New', monospace !important;
-            font-size: 11px !important;
-            line-height: 1.2 !important;
-            background: white !important;
-            color: black !important;
+            width: 80mm;
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            line-height: 1.3;
+            color: #000;
+            background: #fff;
           }
-          .thermal-receipt * {
-            box-sizing: border-box !important;
-            margin: 0 !important;
-            padding: 0 !important;
+          
+          .receipt-section {
+            width: 100%;
+            border-bottom: 1px dashed #000;
+            padding: 5px 0;
+            margin: 0;
           }
-          .receipt-header,
-          .receipt-section,
-          .receipt-footer {
-            width: 100% !important;
-            text-align: center !important;
-            padding: 4px 0 !important;
-            border-bottom: 1px dashed #000 !important;
-            margin-bottom: 4px !important;
+          
+          .receipt-header {
+            text-align: center;
           }
-          .receipt-header h1 {
-            font-size: 14px !important;
-            font-weight: bold !important;
-            margin: 2px 0 !important;
+          
+          .receipt-header h2 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: bold;
           }
+          
           .receipt-header p {
-            font-size: 10px !important;
-            margin: 1px 0 !important;
+            margin: 2px 0;
+            font-size: 9px;
           }
-          .receipt-info {
-            text-align: left !important;
+          
+          .receipt-items {
+            width: 100%;
           }
-          .receipt-info div {
-            font-size: 10px !important;
-            margin: 1px 0 !important;
-            word-wrap: break-word !important;
+          
+          .item-row {
+            display: grid;
+            grid-template-columns: 1fr 30px 40px;
+            gap: 5px;
+            font-size: 9px;
+            padding: 2px 0;
           }
-          .items-table {
-            width: 100% !important;
-            border-collapse: collapse !important;
-          }
-          .items-table th,
-          .items-table td {
-            border: none !important;
-            padding: 1px 0 !important;
-            font-size: 10px !important;
-          }
-          .items-table th {
-            border-bottom: 1px solid #000 !important;
-            font-weight: bold !important;
-            text-align: left !important;
-            padding-bottom: 2px !important;
-          }
-          .items-table td {
-            vertical-align: top !important;
-          }
+          
           .item-name {
-            word-break: break-word !important;
-            width: auto !important;
+            word-break: break-word;
+            text-align: left;
           }
+          
           .item-qty {
-            width: 30px !important;
-            text-align: center !important;
-            padding: 0 2px !important;
+            text-align: center;
           }
+          
           .item-total {
-            width: 40px !important;
-            text-align: right !important;
-            padding: 0 0 !important;
+            text-align: right;
           }
-          .totals-section {
-            font-size: 10px !important;
-            width: 100% !important;
+          
+          .totals {
+            padding: 5px 0;
+            font-size: 9px;
           }
-          .total-row {
-            display: flex !important;
-            justify-content: space-between !important;
-            margin: 2px 0 !important;
-            width: 100% !important;
+          
+          .total-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 1px 0;
           }
-          .total-amount {
-            text-align: center !important;
-            margin: 4px 0 !important;
+          
+          .grand-total {
+            text-align: center;
+            padding: 5px 0;
+            font-size: 14px;
+            font-weight: bold;
           }
-          .total-amount-value {
-            font-size: 16px !important;
-            font-weight: bold !important;
-            margin: 4px 0 !important;
+          
+          .receipt-footer {
+            text-align: center;
+            font-size: 8px;
+            padding: 5px 0;
+          }
+        }
+        
+        @media screen {
+          .receipt-container {
+            display: none;
           }
         }
       `}</style>
 
-      {/* Hidden Receipt for Printing - Thermal Printer Format */}
-      <div className="thermal-receipt">
-        {/* Receipt Header */}
-        <div className="receipt-header">
-          <h1>MY CAFE</h1>
+      {/* Hidden receipt for printing */}
+      <div className="receipt-container">
+        <div className="receipt-section receipt-header">
+          <h2>MY CAFE</h2>
           <p>Receipt</p>
           <p>Order #{order.orderNumber}</p>
           <p>{formatDateTime(order.createdAt)}</p>
         </div>
 
-        {/* Order Details */}
-        <div className="receipt-section receipt-info">
-          <div>
+        <div className="receipt-section">
+          <div style={{ fontSize: '9px', padding: '2px 0' }}>
             <strong>Order Type:</strong> {order.orderType}
           </div>
           {order.tableNumber && (
-            <div>
+            <div style={{ fontSize: '9px', padding: '2px 0' }}>
               <strong>Table:</strong> {order.tableNumber}
             </div>
           )}
           {order.customerName && (
-            <div>
+            <div style={{ fontSize: '9px', padding: '2px 0' }}>
               <strong>Customer:</strong> {order.customerName}
             </div>
           )}
         </div>
 
-        {/* Items */}
         <div className="receipt-section">
-          <table className="items-table">
-            <thead>
-              <tr>
-                <th className="item-name">Item</th>
-                <th className="item-qty">Qty</th>
-                <th className="item-total">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {order.orderLines.map((line) => (
-                <tr key={line.id}>
-                  <td className="item-name">{line.menuItem.name}</td>
-                  <td className="item-qty">×{line.quantity}</td>
-                  <td className="item-total">{formatCurrency(line.subtotal)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="item-row" style={{ fontWeight: 'bold', borderBottom: '1px solid #000' }}>
+            <span className="item-name">Item</span>
+            <span className="item-qty">Qty</span>
+            <span className="item-total">Total</span>
+          </div>
+          {order.orderLines.map((line) => (
+            <div key={line.id} className="item-row">
+              <span className="item-name">{line.menuItem.name}</span>
+              <span className="item-qty">×{line.quantity}</span>
+              <span className="item-total">{formatCurrency(line.subtotal)}</span>
+            </div>
+          ))}
         </div>
 
-        {/* Totals */}
-        <div className="receipt-section totals-section">
-          <div className="total-row">
+        <div className="receipt-section totals">
+          <div className="total-line">
             <span>Subtotal:</span>
             <span>{formatCurrency(order.subtotal)}</span>
           </div>
           {order.discount > 0 && (
-            <div className="total-row">
+            <div className="total-line">
               <span>Discount:</span>
               <span>-{formatCurrency(order.discount)}</span>
             </div>
           )}
-          <div className="total-row">
+          <div className="total-line">
             <span>Tax (18%):</span>
             <span>{formatCurrency(order.tax)}</span>
           </div>
         </div>
 
-        {/* Final Total */}
-        <div className="receipt-section">
-          <div className="total-amount">
-            <div>Total Amount</div>
-            <div className="total-amount-value">{formatCurrency(order.total)}</div>
-          </div>
+        <div className="receipt-section grand-total">
+          <div>Total Amount</div>
+          <div style={{ fontSize: '18px' }}>{formatCurrency(order.total)}</div>
         </div>
 
-        {/* Footer */}
         <div className="receipt-footer">
           <p>Thank you for your order!</p>
           <p>Visit us again soon</p>
@@ -279,6 +268,7 @@ export default function OrderDetailPage() {
         </div>
       </div>
 
+      {/* Normal screen view */}
       <div className="no-print space-y-6">
         <div className="flex items-center justify-between">
           <div>
@@ -416,6 +406,6 @@ export default function OrderDetailPage() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </>
   )
 }
