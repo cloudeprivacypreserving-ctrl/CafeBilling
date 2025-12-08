@@ -72,196 +72,8 @@ export default function OrderDetailPage() {
 
   const handlePrint = () => {
     if (!order) return
-
-    // Create a new window for printing
-    const printWindow = window.open('', '_blank')
-    if (!printWindow) {
-      toast({
-        title: 'Error',
-        description: 'Please allow popups to print',
-        variant: 'destructive',
-      })
-      return
-    }
-
-    // Build items HTML
-    const itemsHtml = order.orderLines
-      .map(
-        (line) => `
-            <div class="item-row">
-              <span class="item-name">${line.menuItem.name}</span>
-              <span class="item-qty">×${line.quantity}</span>
-              <span class="item-total">${formatCurrency(line.subtotal)}</span>
-            </div>
-          `
-      )
-      .join('')
-
-    const discountHtml =
-      order.discount > 0
-        ? `
-            <div class="total-row">
-              <span>Discount:</span>
-              <span>-${formatCurrency(order.discount)}</span>
-            </div>
-          `
-        : ''
-
-    // Build the receipt HTML
-    const receiptHTML = `<!DOCTYPE html>
-      <html>
-      <head>
-        <title>Receipt - Order #${order.orderNumber}</title>
-        <style>
-          * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-          }
-          body {
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            width: 80mm;
-            padding: 10px;
-            background: white;
-            color: black;
-          }
-          .header {
-            text-align: center;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed #000;
-          }
-          .header h1 {
-            font-size: 16px;
-            margin: 5px 0;
-          }
-          .header p {
-            font-size: 11px;
-            margin: 2px 0;
-          }
-          .section {
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed #000;
-          }
-          .info-row {
-            font-size: 11px;
-            margin-bottom: 5px;
-          }
-          .items-header {
-            display: flex;
-            justify-content: space-between;
-            font-weight: bold;
-            padding-bottom: 5px;
-            border-bottom: 1px solid #000;
-            margin-bottom: 5px;
-            font-size: 11px;
-          }
-          .item-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            font-size: 11px;
-          }
-          .item-name {
-            flex: 1;
-          }
-          .item-qty {
-            width: 40px;
-            text-align: center;
-          }
-          .item-total {
-            width: 60px;
-            text-align: right;
-          }
-          .totals {
-            padding: 10px 0;
-            font-size: 11px;
-          }
-          .total-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-          }
-          .total-amount {
-            text-align: center;
-            padding: 10px 0;
-            border-bottom: 1px dashed #000;
-          }
-          .total-amount .label {
-            font-size: 11px;
-            margin-bottom: 5px;
-          }
-          .total-amount .amount {
-            font-size: 16px;
-            font-weight: bold;
-          }
-          .footer {
-            text-align: center;
-            font-size: 10px;
-            padding-top: 10px;
-          }
-          .footer p {
-            margin: 5px 0;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <h1>MY CAFE</h1>
-          <p>Receipt</p>
-          <p>Order #${order.orderNumber}</p>
-          <p>${formatDateTime(order.createdAt)}</p>
-        </div>
-
-        <div class="section">
-          <div class="info-row"><strong>Order Type:</strong> ${order.orderType}</div>
-          ${order.tableNumber ? `<div class="info-row"><strong>Table:</strong> ${order.tableNumber}</div>` : ''}
-          ${order.customerName ? `<div class="info-row"><strong>Customer:</strong> ${order.customerName}</div>` : ''}
-        </div>
-
-        <div class="section">
-          <div class="items-header">
-            <span>Item</span>
-            <span>Qty</span>
-            <span>Total</span>
-          </div>
-          ${itemsHtml}
-        </div>
-
-        <div class="totals">
-          <div class="total-row">
-            <span>Subtotal:</span>
-            <span>${formatCurrency(order.subtotal)}</span>
-          </div>
-          ${discountHtml}
-          <div class="total-row">
-            <span>Tax (18%):</span>
-            <span>${formatCurrency(order.tax)}</span>
-          </div>
-        </div>
-
-        <div class="total-amount">
-          <div class="label">Total Amount</div>
-          <div class="amount">${formatCurrency(order.total)}</div>
-        </div>
-
-        <div class="footer">
-          <p>Thank you for your order!</p>
-          <p>Visit us again soon</p>
-          <p>My Cafe</p>
-        </div>
-      </body>
-      </html>`
-
-    printWindow.document.write(receiptHTML)
-    printWindow.document.close()
-
-    // Wait for content to load then print
-    setTimeout(() => {
-      printWindow.print()
-    }, 500)
+    // Print the hidden receipt div
+    window.print()
   }
 
   const handleDownload = () => {
@@ -277,6 +89,177 @@ export default function OrderDetailPage() {
 
   return (
     <div className="space-y-6">
+      {/* Hidden Receipt for Printing - Thermal Printer Format */}
+      <div
+        id="thermal-receipt"
+        style={{
+          display: 'none',
+          width: '80mm',
+          fontFamily: "'Courier New', monospace",
+          fontSize: '12px',
+          padding: '0',
+          margin: '0',
+          textAlign: 'center',
+          backgroundColor: 'white',
+          color: 'black',
+        }}
+      >
+        <style>{`
+          @media print {
+            * {
+              margin: 0 !important;
+              padding: 0 !important;
+            }
+            body {
+              margin: 0 !important;
+              padding: 0 !important;
+              width: 80mm !important;
+            }
+            #thermal-receipt {
+              display: block !important;
+              width: 80mm !important;
+              margin: 0 !important;
+              padding: 0 !important;
+              page-break-after: avoid !important;
+            }
+            #thermal-receipt * {
+              margin: 0 !important;
+              padding: 0 !important;
+            }
+            .no-print {
+              display: none !important;
+            }
+          }
+        `}</style>
+
+        {/* Receipt Header */}
+        <div
+          style={{
+            textAlign: 'center',
+            paddingBottom: '8px',
+            borderBottom: '1px dashed #000',
+            marginBottom: '8px',
+          }}
+        >
+          <h1 style={{ fontSize: '16px', fontWeight: 'bold', margin: '5px 0' }}>MY CAFE</h1>
+          <p style={{ fontSize: '11px', margin: '2px 0' }}>Receipt</p>
+          <p style={{ fontSize: '11px', margin: '2px 0' }}>Order #{order.orderNumber}</p>
+          <p style={{ fontSize: '11px', margin: '2px 0' }}>{formatDateTime(order.createdAt)}</p>
+        </div>
+
+        {/* Order Details */}
+        <div
+          style={{
+            paddingBottom: '8px',
+            borderBottom: '1px dashed #000',
+            marginBottom: '8px',
+            textAlign: 'left',
+            fontSize: '11px',
+          }}
+        >
+          <div style={{ marginBottom: '3px' }}>
+            <strong>Order Type:</strong> {order.orderType}
+          </div>
+          {order.tableNumber && (
+            <div style={{ marginBottom: '3px' }}>
+              <strong>Table:</strong> {order.tableNumber}
+            </div>
+          )}
+          {order.customerName && (
+            <div style={{ marginBottom: '3px' }}>
+              <strong>Customer:</strong> {order.customerName}
+            </div>
+          )}
+        </div>
+
+        {/* Items */}
+        <div
+          style={{
+            paddingBottom: '8px',
+            borderBottom: '1px dashed #000',
+            marginBottom: '8px',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              fontSize: '11px',
+              fontWeight: 'bold',
+              paddingBottom: '5px',
+              borderBottom: '1px solid #000',
+              marginBottom: '5px',
+            }}
+          >
+            <span style={{ flex: 1 }}>Item</span>
+            <span style={{ width: '35px', textAlign: 'center' }}>Qty</span>
+            <span style={{ width: '50px', textAlign: 'right' }}>Total</span>
+          </div>
+          {order.orderLines.map((line) => (
+            <div
+              key={line.id}
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                fontSize: '11px',
+                marginBottom: '3px',
+              }}
+            >
+              <span style={{ flex: 1 }}>{line.menuItem.name}</span>
+              <span style={{ width: '35px', textAlign: 'center' }}>×{line.quantity}</span>
+              <span style={{ width: '50px', textAlign: 'right' }}>
+                {formatCurrency(line.subtotal)}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Totals */}
+        <div
+          style={{
+            paddingBottom: '8px',
+            borderBottom: '1px dashed #000',
+            marginBottom: '8px',
+            fontSize: '11px',
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
+            <span>Subtotal:</span>
+            <span>{formatCurrency(order.subtotal)}</span>
+          </div>
+          {order.discount > 0 && (
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
+              <span>Discount:</span>
+              <span>-{formatCurrency(order.discount)}</span>
+            </div>
+          )}
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span>Tax (18%):</span>
+            <span>{formatCurrency(order.tax)}</span>
+          </div>
+        </div>
+
+        {/* Final Total */}
+        <div
+          style={{
+            textAlign: 'center',
+            paddingBottom: '8px',
+            borderBottom: '1px dashed #000',
+            marginBottom: '8px',
+          }}
+        >
+          <div style={{ fontSize: '11px', marginBottom: '3px' }}>Total Amount</div>
+          <div style={{ fontSize: '18px', fontWeight: 'bold' }}>{formatCurrency(order.total)}</div>
+        </div>
+
+        {/* Footer */}
+        <div style={{ textAlign: 'center', fontSize: '10px' }}>
+          <p style={{ margin: '3px 0' }}>Thank you for your order!</p>
+          <p style={{ margin: '3px 0' }}>Visit us again soon</p>
+          <p style={{ margin: '3px 0' }}>My Cafe</p>
+        </div>
+      </div>
+
       <div className="no-print space-y-6">
         <div className="flex items-center justify-between">
           <div>
