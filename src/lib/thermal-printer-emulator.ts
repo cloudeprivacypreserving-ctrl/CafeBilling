@@ -21,6 +21,8 @@ interface ReceiptData {
   total: number
 }
 
+import { formatCurrency } from '@/lib/utils'
+
 const PRINTER_WIDTH = 42 // 80mm thermal printer = ~42 characters
 const SEPARATOR = '─'.repeat(PRINTER_WIDTH)
 const DOUBLE_SEPARATOR = '═'.repeat(PRINTER_WIDTH)
@@ -81,23 +83,24 @@ export function generateThermalReceiptText(data: ReceiptData): string {
 
   // Items
   for (const item of data.items) {
-    const priceStr = `₹${item.subtotal.toFixed(2)}`
+    const priceStr = formatCurrency(item.subtotal)
     receipt += formatItemRow(item.name, item.quantity, priceStr) + '\n'
   }
 
   // Totals
   receipt += SEPARATOR + '\n'
-  receipt += `Subtotal${' '.repeat(PRINTER_WIDTH - 'Subtotal'.length - 9)}₹${data.subtotal.toFixed(2)}\n`
+  receipt += `Subtotal${' '.repeat(PRINTER_WIDTH - 'Subtotal'.length - formatCurrency(data.subtotal).length - 1)}${formatCurrency(data.subtotal)}\n`
 
   if (data.discount > 0) {
-    receipt += `Discount${' '.repeat(PRINTER_WIDTH - 'Discount'.length - 9)}-₹${data.discount.toFixed(2)}\n`
+    const discountStr = `-${formatCurrency(data.discount)}`
+    receipt += `Discount${' '.repeat(PRINTER_WIDTH - 'Discount'.length - discountStr.length - 1)}${discountStr}\n`
   }
 
-  receipt += `Tax (18%)${' '.repeat(PRINTER_WIDTH - 'Tax (18%)'.length - 9)}₹${data.tax.toFixed(2)}\n`
+  receipt += `Tax (18%)${' '.repeat(PRINTER_WIDTH - 'Tax (18%)'.length - formatCurrency(data.tax).length - 1)}${formatCurrency(data.tax)}\n`
   receipt += DOUBLE_SEPARATOR + '\n'
 
   // Grand Total
-  const totalStr = `₹${data.total.toFixed(2)}`
+  const totalStr = formatCurrency(data.total)
   receipt += centerText('TOTAL') + '\n'
   receipt += centerText(totalStr) + '\n'
   receipt += DOUBLE_SEPARATOR + '\n'
