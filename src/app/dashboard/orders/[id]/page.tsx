@@ -139,108 +139,148 @@ export default function OrderDetailPage() {
       `}</style>
 
       <div className="print-only">
-        <div className="print-receipt">
-          <div
-            style={{ textAlign: 'center', paddingBottom: '10px', borderBottom: '1px dashed #000' }}
-          >
-            <h1 style={{ margin: '5px 0', fontSize: '16px', fontWeight: 'bold' }}>MY CAFE</h1>
-            <p style={{ margin: '2px 0', fontSize: '10px' }}>Receipt</p>
-            <p style={{ margin: '2px 0', fontSize: '10px' }}>Order #{order?.orderNumber}</p>
-            <p style={{ margin: '2px 0', fontSize: '10px' }}>
-              {order && formatDateTime(order.createdAt)}
-            </p>
-          </div>
-
-          <div style={{ padding: '10px 0', borderBottom: '1px dashed #000' }}>
-            <div style={{ marginBottom: '5px' }}>
-              <strong>Order Type:</strong> {order?.orderType}
-            </div>
-            {order?.tableNumber && (
-              <div style={{ marginBottom: '5px' }}>
-                <strong>Table:</strong> {order.tableNumber}
-              </div>
-            )}
-            {order?.customerName && (
-              <div style={{ marginBottom: '5px' }}>
-                <strong>Customer:</strong> {order.customerName}
-              </div>
-            )}
-          </div>
-
-          <div style={{ padding: '10px 0', borderBottom: '1px dashed #000' }}>
+        {order && (
+          <div className="print-receipt">
             <div
               style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginBottom: '5px',
-                fontSize: '12px',
+                textAlign: 'center',
+                paddingBottom: '10px',
+                borderBottom: '1px dashed #000',
+                marginBottom: '10px',
               }}
             >
-              <span style={{ fontWeight: 'bold' }}>Item</span>
-              <span style={{ fontWeight: 'bold' }}>Qty</span>
-              <span style={{ fontWeight: 'bold' }}>Total</span>
+              <h1 style={{ margin: '5px 0', fontSize: '16px', fontWeight: 'bold' }}>MY CAFE</h1>
+              <p style={{ margin: '2px 0', fontSize: '11px' }}>Receipt</p>
+              <p style={{ margin: '2px 0', fontSize: '11px' }}>Order #{order.orderNumber}</p>
+              <p style={{ margin: '2px 0', fontSize: '11px' }}>
+                {order && formatDateTime(order.createdAt)}
+              </p>
             </div>
-            {order?.orderLines.map((line) => (
+
+            <div
+              style={{
+                padding: '10px 0',
+                borderBottom: '1px dashed #000',
+                marginBottom: '10px',
+              }}
+            >
+              <div style={{ marginBottom: '5px' }}>
+                <strong>Order Type:</strong> {order.orderType}
+              </div>
+              {order.tableNumber && (
+                <div style={{ marginBottom: '5px' }}>
+                  <strong>Table:</strong> {order.tableNumber}
+                </div>
+              )}
+              {order.customerName && (
+                <div style={{ marginBottom: '5px' }}>
+                  <strong>Customer:</strong> {order.customerName}
+                </div>
+              )}
+            </div>
+
+            <div
+              style={{
+                padding: '10px 0',
+                borderBottom: '1px dashed #000',
+                marginBottom: '10px',
+              }}
+            >
               <div
-                key={line.id}
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
+                  marginBottom: '8px',
                   fontSize: '11px',
-                  marginBottom: '3px',
+                  fontWeight: 'bold',
+                  paddingBottom: '5px',
+                  borderBottom: '1px solid #000',
                 }}
               >
-                <span style={{ flex: 1 }}>{line.menuItem.name}</span>
-                <span style={{ width: '30px', textAlign: 'center' }}>×{line.quantity}</span>
-                <span style={{ width: '50px', textAlign: 'right' }}>
-                  {formatCurrency(line.subtotal)}
-                </span>
+                <span style={{ flex: 1 }}>Item</span>
+                <span style={{ width: '40px', textAlign: 'center' }}>Qty</span>
+                <span style={{ width: '60px', textAlign: 'right' }}>Total</span>
               </div>
-            ))}
-          </div>
-
-          <div style={{ padding: '10px 0', borderBottom: '1px dashed #000', fontSize: '12px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-              <span>Subtotal:</span>
-              <span>{order && formatCurrency(order.subtotal)}</span>
+              {order.orderLines && order.orderLines.length > 0 ? (
+                order.orderLines.map((line) => (
+                  <div
+                    key={line.id}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      fontSize: '11px',
+                      marginBottom: '5px',
+                    }}
+                  >
+                    <span style={{ flex: 1 }}>{line.menuItem.name}</span>
+                    <span style={{ width: '40px', textAlign: 'center' }}>×{line.quantity}</span>
+                    <span style={{ width: '60px', textAlign: 'right' }}>
+                      {formatCurrency(line.subtotal)}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <div style={{ fontSize: '11px', color: '#666' }}>No items</div>
+              )}
             </div>
-            {order?.discount > 0 && (
+
+            <div
+              style={{
+                padding: '10px 0',
+                borderBottom: '1px dashed #000',
+                marginBottom: '10px',
+                fontSize: '11px',
+              }}
+            >
               <div
-                style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  marginBottom: '5px',
+                }}
               >
-                <span>Discount:</span>
-                <span>-{order && formatCurrency(order.discount)}</span>
+                <span>Subtotal:</span>
+                <span>{formatCurrency(order.subtotal)}</span>
               </div>
-            )}
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-              <span>Tax (18%):</span>
-              <span>{order && formatCurrency(order.tax)}</span>
+              {order.discount > 0 && (
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    marginBottom: '5px',
+                  }}
+                >
+                  <span>Discount:</span>
+                  <span>-{formatCurrency(order.discount)}</span>
+                </div>
+              )}
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>Tax (18%):</span>
+                <span>{formatCurrency(order.tax)}</span>
+              </div>
+            </div>
+
+            <div
+              style={{
+                padding: '10px 0',
+                textAlign: 'center',
+                borderBottom: '1px dashed #000',
+                marginBottom: '10px',
+              }}
+            >
+              <div style={{ fontSize: '11px', marginBottom: '5px' }}>Total Amount</div>
+              <div style={{ fontSize: '16px', fontWeight: 'bold' }}>
+                {formatCurrency(order.total)}
+              </div>
+            </div>
+
+            <div style={{ padding: '10px 0', textAlign: 'center', fontSize: '10px' }}>
+              <p style={{ margin: '5px 0' }}>Thank you for your order!</p>
+              <p style={{ margin: '2px 0' }}>Visit us again soon</p>
+              <p style={{ margin: '2px 0' }}>My Cafe</p>
             </div>
           </div>
-
-          <div
-            style={{ padding: '10px 0', textAlign: 'center', fontSize: '14px', fontWeight: 'bold' }}
-          >
-            <div style={{ marginBottom: '5px' }}>Total Amount</div>
-            <div style={{ fontSize: '18px', color: '#000' }}>
-              {order && formatCurrency(order.total)}
-            </div>
-          </div>
-
-          <div
-            style={{
-              padding: '10px 0',
-              borderTop: '1px dashed #000',
-              textAlign: 'center',
-              fontSize: '10px',
-              color: '#666',
-            }}
-          >
-            <p style={{ margin: '5px 0' }}>Thank you for your order!</p>
-            <p style={{ margin: '2px 0' }}>Visit us again soon</p>
-            <p style={{ margin: '2px 0' }}>My Cafe</p>
-          </div>
-        </div>
+        )}
       </div>
 
       <div className="no-print space-y-6">
